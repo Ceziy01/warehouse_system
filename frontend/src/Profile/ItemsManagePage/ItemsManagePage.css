@@ -1,0 +1,96 @@
+@import "../../styles/shared.css";
+
+.items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.items-table {
+  min-width: 1000px;
+}
+
+.items-table th, .items-table td {
+  white-space: nowrap;
+  padding: 10px 8px;
+}
+
+.items-table td {
+  font-size: 13px;
+}
+
+.search-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  padding: 0 40px 0 16px;
+  border-radius: 30px;
+  border: 1px solid var(--input-border);
+  background: var(--input-bg);
+  height: 44px;
+  width: 260px;
+  font-size: 14px;
+  color: var(--text-primary);
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary-container);
+}
+
+.search-clear {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--icon-color);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.search-clear:hover {
+  background: var(--surface-variant);
+}
+
+.image-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.image-modal {
+  background: var(--surface);
+  padding: 20px;
+  border-radius: 24px;
+  max-width: 80%;
+  max-height: 80%;
+}
+
+.image-modal img {
+  max-width: 100%;
+  max-height: 70vh;
+}

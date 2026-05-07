@@ -1,0 +1,129 @@
+.cart-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cart-container h2 {
+  margin-bottom: 24px;
+  font-size: 28px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--card-bg);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  margin-bottom: 24px;
+}
+
+.cart-table th,
+.cart-table td {
+  padding: 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--divider);
+  vertical-align: middle;
+}
+
+.cart-table th {
+  background: var(--surface-variant);
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.cart-table td {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.cart-table td:first-child,
+.cart-table th:first-child {
+  padding-left: 24px;
+}
+
+.cart-table td:last-child,
+.cart-table th:last-child {
+  padding-right: 24px;
+}
+
+.cart-table button {
+  background: none;
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 6px 12px;
+  margin: 0 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  color: var(--text-primary);
+}
+
+.cart-table button:hover:not(:disabled) {
+  background: var(--surface-variant);
+  border-color: var(--primary);
+}
+
+.cart-table button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-btn.delete-btn {
+  background: transparent;
+  color: var(--error);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.action-btn.delete-btn:hover {
+  background: var(--error-container);
+}
+
+.cart-total {
+  text-align: right;
+  font-size: 20px;
+  font-weight: 700;
+  padding: 16px 24px;
+  background: var(--card-bg);
+  border-radius: 24px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  margin-bottom: 24px;
+  color: var(--text-primary);
+}
+
+.checkout-btn {
+  background: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  border-radius: 40px;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  width: 100%;
+  max-width: 300px;
+  display: block;
+  margin: 0 auto;
+  box-shadow: var(--shadow-sm);
+}
+
+.checkout-btn:hover {
+  background: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+}

@@ -1,0 +1,19 @@
+.profile-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--bg-body);
+}
+
+.profile-content {
+  flex: 1;
+  padding: 32px 36px;
+  overflow: auto;
+}
+
+.profile-info-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  margin-top: 20px;
+}

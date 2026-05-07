@@ -1,0 +1,118 @@
+from typing import Annotated, List
+from fastapi import APIRouter, Depends, HTTPException, Request
+from sqlalchemy.orm import Session
+
+from app.core.dependencies import get_db, require_any_authenticated, require_admin_or_warehouse_keeper
+from app.db.models.user import Users
+from app.db.models.category import Category
+from app.schemas.category import CategoryCreate, CategoryUpdate, CategoryResponse
+from app.db.models.activity_log import ActionType
+from app.services.activity_log import log_action
+from app.db.models.item import Item
+
+router = APIRouter(prefix="/categories", tags=["categories"])
+
+
+@router.get("", response_model=List[CategoryResponse])
+def list_categories(
+    db: Annotated[Session, Depends(get_db)],
+    user: Annotated[Users, Depends(require_any_authenticated)]
+):
+    return db.query(Category).all()
+
+
+@router.post("", response_model=CategoryResponse, status_code=201)
+def create_category(
+    data: CategoryCreate,
+    db: Annotated[Session, Depends(get_db)],
+    user: Annotated[Users, Depends(require_admin_or_warehouse_keeper)],
+    req: Request = None
+):
+    existing = db.query(Category).filter(Category.name == data.name).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Категория с таким названием уже существует")
+    category = Category(**data.model_dump())
+    db.add(category)
+    db.commit()
+    db.refresh(category)
+
+    log_action(
+        db, user, ActionType.CATEGORY_CREATED,
+        entity_type="category", entity_id=category.id,
+        entity_name=category.name,
+        ip_address=req.client.host if req else None
+    )
+
+    return category
+
+
+@router.patch("/{category_id}", response_model=CategoryResponse)
+def update_category(
+    category_id: int,
+    data: CategoryUpdate,
+    db: Annotated[Session, Depends(get_db)],
+    user: Annotated[Users, Depends(require_admin_or_warehouse_keeper)],
+    req: Request = None
+):
+    category = db.query(Category).filter(Category.id == category_id).first()
+    if not category:
+        raise HTTPException(status_code=404, detail="Категория не найдена")
+
+    update_data = data.model_dump(exclude_unset=True)
+
+    if "name" in update_data and update_data["name"] != category.name:
+        existing = db.query(Category).filter(
+            Category.name == update_data["name"],
+            Category.id != category_id
+        ).first()
+        if existing:
+            raise HTTPException(status_code=400, detail="Категория с таким названием уже существует")
+
+    changes = {}
+    for field, value in update_data.items():
+        old_val = getattr(category, field, None)
+        if old_val != value:
+            changes[field] = {"old": old_val, "new": value}
+        setattr(category, field, value)
+
+    db.commit()
+    db.refresh(category)
+
+    log_action(
+        db, user, ActionType.CATEGORY_UPDATED,
+        entity_type="category", entity_id=category.id,
+        entity_name=category.name,
+        ip_address=req.client.host if req else None
+    )
+
+    return category
+
+
+@router.delete("/{category_id}")
+def delete_category(
+    category_id: int,
+    db: Annotated[Session, Depends(get_db)],
+    user: Annotated[Users, Depends(require_admin_or_warehouse_keeper)],
+    req: Request = None
+):
+    category = db.query(Category).filter(Category.id == category_id).first()
+    if not category:
+        raise HTTPException(status_code=404, detail="Категория не найдена")
+
+    items_count = db.query(Item).filter(Item.category_id == category_id).count()
+    if items_count:
+        raise HTTPException(
+            status_code=400,
+            detail="Нельзя удалить категорию, к которой привязаны товары."
+        )
+
+    log_action(
+        db, user, ActionType.CATEGORY_DELETED,
+        entity_type="category", entity_id=category.id,
+        entity_name=category.name,
+        ip_address=req.client.host if req else None
+    )
+
+    db.delete(category)
+    db.commit()
+    return {"message": "Категория удалена"}

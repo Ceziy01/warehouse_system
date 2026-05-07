@@ -1,0 +1,82 @@
+# ======== Python ========
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.env
+.venv/
+venv/
+*.so
+
+# ======== Node.js / React ========
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnp
+.pnp.js
+
+# Собранный фронтенд
+frontend/build/
+
+# ======== IDE / Редакторы ========
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ======== База данных ========
+*.db
+*.sqlite
+*.sqlite3
+storage.db
+
+# ======== Бэкапы (ЛОКАЛЬНЫЕ) ========
+backups/
+*.sql
+!init.sql
+!migrations/*.sql
+
+# ======== Docker ========
+*.tar
+docker-compose.override.yml
+
+# ======== Секреты и конфигурация ========
+.env
+*.env.local
+*.env.production.local
+
+# ======== Сгенерированные файлы ========
+code.txt
+крч.txt
+load.py
+test.py
+
+# ======== Медиафайлы бэкенда (если не хотите хранить в гите) ========
+# backend/images/*
+# !backend/images/default.png
+# !backend/images/.gitkeep
+
+# ======== AI модель ========
+# backend/app/ai/ai_model.pkl
+
+# ======== Логи ========
+*.log
+logs/
+
+# ======= ssh =======
+keys
+keys.pub
+
+
+
+.todo
+deploy_on_server.bat
