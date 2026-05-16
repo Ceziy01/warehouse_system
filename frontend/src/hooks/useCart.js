@@ -8,16 +8,19 @@ export function useCart() {
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState({});
 
-  const loadCart = async () => {
-    setLoading(true);
+  const loadCart = async (showLoader = false) => {
+    if (showLoader) setLoading(true);
+
     const res = await fetchWithAuth("/cart");
+
     if (res.ok) {
       const data = await res.json();
       setCart(data);
     } else {
       toast.error("Ошибка загрузки корзины");
     }
-    setLoading(false);
+
+    if (showLoader) setLoading(false);
   };
 
   const updateQuantity = async (itemId, newQuantity) => {
@@ -25,29 +28,52 @@ export function useCart() {
       await removeItem(itemId);
       return;
     }
+
     setUpdating(prev => ({ ...prev, [itemId]: true }));
-    const res = await fetchWithAuth(`/cart/items/${itemId}`, {
-      method: "PATCH",
-      body: JSON.stringify({ quantity: newQuantity })
-    });
-    setUpdating(prev => ({ ...prev, [itemId]: false }));
-    if (res.ok || res.status === 204) {
-      loadCart();
-    } else {
-      const error = await res.json();
-      toast.error(error.detail || "Ошибка обновления");
+
+    try {
+      const res = await fetchWithAuth(`/cart/items/${itemId}`, {
+        method: "PATCH",
+        body: JSON.stringify({ quantity: newQuantity })
+      });
+
+      if (res.ok || res.status === 204) {
+        setCart(prev =>
+          prev.map(item =>
+            item.item_id === itemId
+              ? {
+                ...item,
+                quantity: newQuantity,
+                total_price: item.price * newQuantity
+              }
+              : item
+          )
+        );
+      } else {
+        const error = await res.json();
+        toast.error(error.detail || "Ошибка обновления");
+      }
+    } finally {
+      setUpdating(prev => ({ ...prev, [itemId]: false }));
     }
   };
 
   const removeItem = async (itemId) => {
     setUpdating(prev => ({ ...prev, [itemId]: true }));
-    const res = await fetchWithAuth(`/cart/items/${itemId}`, { method: "DELETE" });
-    setUpdating(prev => ({ ...prev, [itemId]: false }));
-    if (res.ok) {
-      loadCart();
-    } else {
-      const error = await res.json();
-      toast.error(error.detail || "Ошибка удаления");
+
+    try {
+      const res = await fetchWithAuth(`/cart/items/${itemId}`, {
+        method: "DELETE"
+      });
+
+      if (res.ok) {
+        await loadCart();
+      } else {
+        const error = await res.json();
+        toast.error(error.detail || "Ошибка удаления");
+      }
+    } finally {
+      setUpdating(prev => ({ ...prev, [itemId]: false }));
     }
   };
 
@@ -67,7 +93,7 @@ export function useCart() {
   };
 
   useEffect(() => {
-    loadCart();
+    loadCart(true);
   }, []);
 
   return { cart, loading, updating, updateQuantity, removeItem, addToCart, loadCart };

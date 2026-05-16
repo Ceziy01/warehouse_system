@@ -28,8 +28,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend/images:/app/images  # только images, код не монтируем
-    # используется CMD из Dockerfile (без --reload)
+      - ./backend/images:/app/images
 
   frontend:
     build:
@@ -38,7 +37,6 @@ services:
         REACT_APP_API_URL: /api
     container_name: warehouse-frontend
     restart: unless-stopped
-    # собранный nginx сам слушает :80 внутри контейнера
 
   nginx:
     image: nginx:alpine

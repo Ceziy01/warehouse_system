@@ -68,7 +68,7 @@ def login(
             "token_type": "bearer"
         }
     except HTTPException:
-        raise  # не трогаем наши собственные HTTP-исключения
+        raise
     except Exception as e:
         print("ERROR in /token:", file=sys.stderr)
         traceback.print_exc()

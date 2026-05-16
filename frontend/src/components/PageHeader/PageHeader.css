@@ -39,3 +39,37 @@
   font-size: 13px;
   margin: 0;
 }
+
+/* ─── Мобильная версия ─── */
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: row;       /* заголовок и кнопка(и) остаются в одной строке */
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
+
+  .page-title-group {
+    gap: 12px;
+    flex: 1;
+    min-width: 0;              /* разрешаем сжиматься */
+  }
+
+  .page-icon {
+    font-size: 24px;
+    padding: 8px;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+
+  .page-title {
+    font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .page-sub {
+    font-size: 12px;
+  }
+}

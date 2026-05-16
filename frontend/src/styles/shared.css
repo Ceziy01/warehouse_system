@@ -176,13 +176,6 @@
   border-color: var(--primary);
 }
 
-.container {
-  width: 100%;
-  overflow-x: auto;
-  margin: 0;
-  padding: 0;
-}
-
 .badge-role {
   background: var(--primary-container);
   color: var(--on-primary-container);
@@ -497,4 +490,104 @@ body.dark {
 .excel-btn {
   background: var(--btn-excel-bg);
   color: var(--btn-excel-color);
+}
+
+
+.container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 768px) {
+  .table th,
+  .table td {
+    padding: 12px 10px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .action-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .action-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-section {
+    width: 100%;
+  }
+
+  .search-wrapper {
+    flex: 1;
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .modal-content {
+    border-radius: 20px;
+    padding: 20px 16px;
+    margin: 12px;
+    max-width: calc(100vw - 24px);
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .modal-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .filters-panel {
+    padding: 16px;
+  }
+
+  .filters-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .filter-group {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .order-card {
+    padding: 14px;
+  }
+
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .primary-btn,
+  .save-btn,
+  .cancel-btn {
+    font-size: 13px;
+    padding: 8px 14px;
+  }
 }

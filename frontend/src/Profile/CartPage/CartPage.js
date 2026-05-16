@@ -5,6 +5,7 @@ import { useCart } from "../../hooks/useCart";
 import { fetchWithAuth } from "../../utils/api";
 import "./CartPage.css";
 import PageHeader from "../../components/PageHeader/PageHeader";
+import ActionButton from "../../components/ActionButton/ActionButton";
 
 function CartPage() {
   const { cart, loading, updating, updateQuantity, removeItem, loadCart } = useCart();
@@ -50,27 +51,38 @@ function CartPage() {
                   <td>{item.name}</td>
                   <td>{item.price} ₽</td>
                   <td>
-                    <button
-                      onClick={() => updateQuantity(item.item_id, item.quantity - 1)}
-                      disabled={updating[item.item_id]}
-                    >-</button>
-                    {item.quantity}
-                    <button
-                      onClick={() => updateQuantity(item.item_id, item.quantity + 1)}
-                      disabled={updating[item.item_id]}
-                    >+</button>
+                    <div className="cart-qty-controls">
+                      <button
+                        className="cart-qty-btn"
+                        onClick={() => updateQuantity(item.item_id, item.quantity - 1)}
+                        disabled={updating[item.item_id]}
+                      >
+                        −
+                      </button>
+
+                      <span className="cart-qty-value">
+                        {item.quantity}
+                      </span>
+
+                      <button
+                        className="cart-qty-btn"
+                        onClick={() => updateQuantity(item.item_id, item.quantity + 1)}
+                        disabled={updating[item.item_id]}
+                      >
+                        +
+                      </button>
+                    </div>
                   </td>
                   <td>{item.total_price} ₽</td>
                   <td>
-                    <button
-                      type="button"
-                      className="action-btn delete-btn"
+                    <ActionButton
+                      type="danger"
                       onClick={() => removeItem(item.item_id)}
                       disabled={updating[item.item_id]}
-                      title="Удалить"
+                      tip="Удалить"
                     >
                       <span className="material-symbols-outlined">delete</span>
-                    </button>
+                    </ActionButton>
                   </td>
                 </tr>
               ))}

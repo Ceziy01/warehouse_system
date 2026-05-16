@@ -69,7 +69,7 @@ def get_cart(
     db: Annotated[Session, Depends(get_db)],
     current_user: Annotated[Users, Depends(get_current_user)]
 ):
-    cart_items = db.query(CartItem).filter(CartItem.user_id == current_user.id).all()
+    cart_items = db.query(CartItem).filter(CartItem.user_id == current_user.id).order_by(CartItem.id.asc()).all()
     result = []
     for ci in cart_items:
         item = ci.item
