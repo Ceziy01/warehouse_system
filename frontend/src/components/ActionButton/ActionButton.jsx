@@ -15,6 +15,9 @@ function ActionButton({ children, onClick, tip, type = 'default', color, disable
     case "extra":
       typeClass = "extra-btn";
       break;
+    case "extra1":
+      typeClass = "extra1-btn";
+      break;
     case "excel":
       typeClass = "excel-btn";
       break;

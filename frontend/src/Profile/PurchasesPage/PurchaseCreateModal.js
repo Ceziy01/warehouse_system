@@ -62,55 +62,64 @@ function PurchaseCreateModal({ onClose, onSave }) {
         <h3>Новая закупка</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-row">
-            <input
-              type="text"
-              className="modal-input"
-              placeholder="Название товара *"
-              value={form.product_name}
-              onChange={e => setForm({ ...form, product_name: e.target.value })}
-              required
-            />
+            <div className="input-group">
+              <label>Название товара *</label>
+              <input
+                placeholder="Название товара"
+                value={form.product_name}
+                onChange={e => setForm({ ...form, product_name: e.target.value })}
+                required
+              />
+            </div>
           </div>
           <div className="form-row" style={{ gap: "10px" }}>
-            <input
-              type="number"
-              className="modal-input"
-              placeholder="Количество *"
-              value={form.quantity}
-              onChange={e => setForm({ ...form, quantity: parseInt(e.target.value) || 0 })}
-              min="1"
-              required
-            />
-            <input
-              type="number"
-              className="modal-input"
-              placeholder="Закупочная цена (₽) *"
-              value={form.purchase_price}
-              onChange={e => setForm({ ...form, purchase_price: parseFloat(e.target.value) || 0 })}
-              min="0"
-              step="1"
-              required
-            />
+            <div className="input-group">
+              <label>Количество *</label>
+              <input
+                type="number"
+                placeholder="Количество"
+                value={form.quantity}
+                onChange={e => setForm({ ...form, quantity: parseInt(e.target.value) || 0 })}
+                min="1"
+                required
+              />
+            </div>
+            <div className="input-group">
+              <label>Закупочная цена *</label>
+              <input
+                type="number"
+                placeholder="Закупочная цена (₽) *"
+                value={form.purchase_price}
+                onChange={e => setForm({ ...form, purchase_price: parseFloat(e.target.value) || 0 })}
+                min="0"
+                step="1"
+                required
+              />
+            </div>
           </div>
           <div className="form-row" style={{ gap: "10px" }}>
-            <select
-              className="modal-input"
-              value={form.supplier_id}
-              onChange={e => setForm({ ...form, supplier_id: e.target.value })}
-              required
-            >
-              <option value="">Поставщик *</option>
-              {suppliers.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
-            </select>
-            <select
-              className="modal-input"
-              value={form.warehouse_id}
-              onChange={e => setForm({ ...form, warehouse_id: e.target.value })}
-              required
-            >
-              <option value="">Склад *</option>
-              {warehouses.map(w => <option key={w.id} value={w.id}>{w.name}</option>)}
-            </select>
+            <div className="input-group">
+              <label>Поставщик *</label>
+              <select
+                value={form.supplier_id}
+                onChange={e => setForm({ ...form, supplier_id: e.target.value })}
+                required
+              >
+                <option value="">Выберите поставщика</option>
+                {suppliers.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+              </select>
+            </div>
+            <div className="input-group">
+              <label>Поставщик *</label>
+              <select
+                value={form.warehouse_id}
+                onChange={e => setForm({ ...form, warehouse_id: e.target.value })}
+                required
+              >
+                <option value="">Выберите склад</option>
+                {warehouses.map(w => <option key={w.id} value={w.id}>{w.name}</option>)}
+              </select>
+            </div>
           </div>
 
           <div className="modal-actions">

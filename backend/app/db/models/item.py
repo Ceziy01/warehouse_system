@@ -1,9 +1,14 @@
-from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey, BigInteger
+from sqlalchemy import Column, Integer, String, Text, Float, ForeignKey, CheckConstraint
 from sqlalchemy.orm import relationship
 from app.core.database import Base
 
 class Item(Base):
     __tablename__ = "items"
+    
+    __table_args__ = (
+        CheckConstraint("quantity >= 0", name="check_quantity_non_negative"),
+        CheckConstraint("price >= 0", name="check_price_non_negative"),
+    )
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)

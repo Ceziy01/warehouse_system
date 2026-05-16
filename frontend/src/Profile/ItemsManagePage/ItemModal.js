@@ -137,7 +137,13 @@ function ItemModal({ item, onClose, onSave }) {
           <div className="form-row">
             <div className="input-group">
               <label>Артикул *</label>
-              <input name="article" placeholder="Артикул" value={form.article} onChange={handleChange} required />
+              <input
+                name="article"
+                placeholder="Артикул"
+                value={form.article}
+                onChange={handleChange}
+                required
+              />
             </div>
             <div className="input-group">
               <label>Название *</label>
@@ -179,6 +185,7 @@ function ItemModal({ item, onClose, onSave }) {
                 placeholder="0"
                 value={form.quantity}
                 onChange={handleChange}
+                min="0"
               />
             </div>
             <div className="input-group">
@@ -201,6 +208,7 @@ function ItemModal({ item, onClose, onSave }) {
                 placeholder="0"
                 value={form.price}
                 onChange={handleChange}
+                min="0"
               />
             </div>
             <div className="input-group">
@@ -211,6 +219,7 @@ function ItemModal({ item, onClose, onSave }) {
                 placeholder="бессрочно"
                 value={form.shelf_life_days}
                 onChange={handleChange}
+                min="0"
               />
             </div>
           </div>

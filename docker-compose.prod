@@ -28,29 +28,17 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/app          # hot-reload: изменения в коде сразу видны
-      - ./backend/images:/app/images
-    command: >
-      sh -c "uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+      - ./backend/images:/app/images  # только images, код не монтируем
+    # используется CMD из Dockerfile (без --reload)
 
   frontend:
-    image: node:20-alpine
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: /api
     container_name: warehouse-frontend
     restart: unless-stopped
-    working_dir: /app
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules       # изолируем node_modules от хоста
-    environment:
-      - CHOKIDAR_USEPOLLING=true   # hot-reload на Windows (polling вместо inotify)
-      - WDS_SOCKET_PORT=0
-      - WATCHPACK_POLLING=true
-      - REACT_APP_API_URL=/api
-    ports:
-      - "3000:3000"             # прямой доступ для отладки
-    command: sh -c "npm install && npm start"
-    depends_on:
-      - backend
+    # собранный nginx сам слушает :80 внутри контейнера
 
   nginx:
     image: nginx:alpine

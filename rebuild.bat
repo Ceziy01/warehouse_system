@@ -1,8 +1,6 @@
 @echo off
-cd /d "%~dp0"
-echo Пересобираем образы (без кэша)...
-docker-compose build --no-cache
-echo Запускаем обновлённые контейнеры...
-docker-compose up -d
-echo Готово!
-pause
+echo [DEV] Пересобираем бэкенд (если менялся Dockerfile или requirements.txt)...
+copy /Y nginx\default.dev.conf nginx\default.conf
+docker compose up -d --build
+
+echo Готово.

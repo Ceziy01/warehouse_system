@@ -308,7 +308,7 @@ function UsersPage() {
                       <ActionButton type="danger" onClick={() => deleteUser(u.id)} tip="Удалить"><span className="material-symbols-outlined">delete</span></ActionButton>
                       <ActionButton type="neutral" onClick={() => startEdit(u)} tip="Редактировать"><span className="material-symbols-outlined">edit</span></ActionButton>
                       <ActionButton type="extra" onClick={() => openResetPasswordModal(u.id, u.username)} tip="Сменить пароль"><span className="material-symbols-outlined">lock_reset</span></ActionButton>
-                      <ActionButton type="impersonate" tip="Войти как пользователь" onClick={() => impersonate(u.id)}><span className="material-symbols-outlined">switch_account</span></ActionButton>
+                      <ActionButton type="extra1" tip="Войти как пользователь" onClick={() => impersonate(u.id)}><span className="material-symbols-outlined">switch_account</span></ActionButton>
                     </div>
                   </td>
                 </tr>

@@ -209,7 +209,7 @@ export default function BackupPage() {
                                             <span className="material-symbols-outlined">download</span>
                                         </ActionButton>
                                         <ActionButton 
-                                            type="apply" 
+                                            type="neutral" 
                                             onClick={() => handleRestoreFromServer(b.filename)} 
                                             tip="Восстановить из бэкапа"
                                             disabled={restoring[b.filename]}

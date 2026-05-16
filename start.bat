@@ -1,6 +1,10 @@
-@echo off
-cd /d "%~dp0"
-echo Запускаем контейнеры...
-docker-compose up -d
-echo Фронтенд: http://localhost, Бэкенд: http://localhost:8000
-pause
+﻿@echo off
+echo [DEV] Копируем nginx конфиг для dev...
+copy /Y nginx\default.dev.conf nginx\default.conf
+
+echo [DEV] Запускаем контейнеры...
+docker compose up -d
+
+echo.
+echo Готово. Приложение доступно на http://localhost
+echo Фронтенд напрямую: http://localhost:3000
