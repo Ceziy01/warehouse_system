@@ -9,9 +9,9 @@ from app.db.models.item import Item
 from app.db.models.warehouse import Warehouse
 from app.db.models.category import Category
 from app.schemas.item import ItemCreate, ItemUpdate, ItemResponse
-from app.services.search_service import ai_search
-from app.db.models.activity_log import ActionType
+from app.services.search_service import search_engine
 from app.services.activity_log import log_action
+from app.db.models.activity_log import ActionType
 
 router = APIRouter(prefix="/items", tags=["items"])
 
@@ -63,6 +63,7 @@ def create_item(
     response = ItemResponse.model_validate(item)
     response.category_name = item.category.name
     response.warehouse_name = item.warehouse.name
+    search_engine.invalidate()
     return response
 
 @router.patch("/{item_id}", response_model=ItemResponse)
@@ -115,6 +116,7 @@ def update_item(
     response = ItemResponse.model_validate(item)
     response.category_name = item.category.name if item.category else None
     response.warehouse_name = item.warehouse.name if item.warehouse else None
+    search_engine.invalidate()
     return response
 
 @router.delete("/{item_id}")
@@ -137,6 +139,7 @@ def delete_item(
 
     db.delete(item)
     db.commit()
+    search_engine.invalidate()
     return {"message": "Товар удалён"}
 
 @router.post("/upload-image")
@@ -157,28 +160,48 @@ def search_items(
     db: Annotated[Session, Depends(get_db)],
     user: Annotated[Users, Depends(require_any_authenticated)]
 ):
-    items = db.query(Item).options(
+    # Загружаем все товары с категориями для индексации
+    all_items = db.query(Item).options(
         joinedload(Item.category),
         joinedload(Item.warehouse)
     ).all()
 
-    goods = [{"id": item.id, "name": item.name, "category": item.category.name if item.category else ""} for item in items]
-    results = ai_search(query, goods)
-    item_ids = [r["item"]["id"] for r in results]
+    # Формируем список dict для движка поиска
+    goods = [
+        {
+            "id": item.id,
+            "name": item.name,
+            "description": item.description or "",
+            "category_name": item.category.name if item.category else "",
+        }
+        for item in all_items
+    ]
 
-    if not item_ids:
+    # Обновляем индекс (пересчёт только если изменилось кол-во товаров)
+    search_engine.update_index(goods)
+
+    # Поиск — возвращает только релевантные, без фиксированного top_k
+    results = search_engine.search(query)
+    result_ids = {r["id"] for r in results}
+
+    if not result_ids:
         return []
 
-    matched_items = db.query(Item).options(
+    # Сохраняем порядок по score
+    score_map = {r["id"]: r["search_score"] for r in results}
+
+    matched = db.query(Item).options(
         joinedload(Item.category),
         joinedload(Item.warehouse)
-    ).filter(Item.id.in_(item_ids)).all()
+    ).filter(Item.id.in_(result_ids)).all()
 
     response = []
-    for item in matched_items:
+    for item in matched:
         r = ItemResponse.model_validate(item)
         r.category_name = item.category.name if item.category else None
         r.warehouse_name = item.warehouse.name if item.warehouse else None
         response.append(r)
 
+    # Сортируем по score из движка
+    response.sort(key=lambda x: score_map.get(x.id, 0), reverse=True)
     return response

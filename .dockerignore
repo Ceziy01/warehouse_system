@@ -12,6 +12,7 @@ build/
 .venv/
 venv/
 *.so
+ml_models/
 
 # ======== Node.js / React ========
 node_modules/

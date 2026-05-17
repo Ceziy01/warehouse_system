@@ -5,6 +5,9 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
+ENV HF_HOME=/app/ml_models/hf_cache
+ENV TRANSFORMERS_CACHE=/app/ml_models/hf_cache
+
 RUN apt-get update && apt-get install -y gcc libpq-dev postgresql-client
 
 COPY requirements.txt .

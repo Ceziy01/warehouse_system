@@ -1,119 +1,121 @@
+import os
+import numpy as np
+from typing import List, Dict, Optional
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
 from rapidfuzz import fuzz
-from transliterate import translit
-from collections import Counter
-import pickle, os
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "../ai/ai_model.pkl")
+MODEL_DIR = os.environ.get("MODEL_DIR", "/app/ml_models")
+MODEL_NAME = "intfloat/multilingual-e5-large"
+LOCAL_MODEL_PATH = os.path.join(MODEL_DIR, "multilingual-e5-large")
 
-model = None
-vectorizer = None
+#минимальна рлевантность
+MIN_SCORE = 0.76
+#ограничение по результатам
+MAX_RESULTS = 20
 
-def load_model():
-    global model, vectorizer
+GAP_CUTOFF = 0.05
 
-    if model is None:
-        with open(MODEL_PATH, "rb") as f:
-            model_data = pickle.load(f)
+EXACT_WORD_THRESHOLD_BONUS = -0.05
 
-        model = model_data["model"]
-        vectorizer = model_data["vectorizer"]
+def _load_model() -> SentenceTransformer:
+    os.makedirs(MODEL_DIR, exist_ok=True)
+    if os.path.isdir(LOCAL_MODEL_PATH) and os.listdir(LOCAL_MODEL_PATH):
+        print(f"[Search] Загрузка из кэша: {LOCAL_MODEL_PATH}")
+        return SentenceTransformer(LOCAL_MODEL_PATH)
+    else:
+        print(f"[Search] Скачиваю {MODEL_NAME}...")
+        model = SentenceTransformer(MODEL_NAME)
+        model.save(LOCAL_MODEL_PATH)
+        print(f"[Search] Сохранено в {LOCAL_MODEL_PATH}")
+        return model
 
-def normalize(text: str):
-    return text.lower().strip()
+class SemanticSearchEngine:
+    def __init__(self):
+        self.model: SentenceTransformer = _load_model()
+        self._items: List[Dict] = []
+        self._embeddings: Optional[np.ndarray] = None
+        self._last_count: int = -1
 
-def normalize_with_translit(text: str):
-    original = normalize(text)
+    def _prepare_text(self, item: Dict) -> str:
+        parts = [
+            f"Название: {item['name']}",
+            f"Название: {item['name']}",
+        ]
+        if item.get("description"):
+            parts.append(f"Описание: {item['description']}")
+        if item.get("category_name"):
+            parts.append(f"Категория: {item['category_name']}")
+        return "passage: " + ". ".join(parts)
 
-    try:
-        translit_text = translit(original, "ru", reversed=True)
-    except Exception:
-        translit_text = original
+    def update_index(self, items: List[Dict]):
+        current_count = len(items)
+        if current_count == self._last_count and self._embeddings is not None:
+            return
 
-    return original, normalize(translit_text)
+        print(f"[Search] Пересчёт индекса: {current_count} товаров...")
+        self._items = items
+        self._last_count = current_count
 
-def build_brand_dict(goods):
-    candidates = []
+        if not items:
+            self._embeddings = np.array([]).reshape(
+                0, self.model.get_sentence_embedding_dimension()
+            )
+            return
 
-    for item in goods:
-        first_word = item["name"].split()[0].lower()
-        candidates.append(first_word)
-
-    counter = Counter(candidates)
-    brands = set()
-
-    for brand, count in counter.items():
-        if count >= 1:
-            brands.add(brand)
-
-    return brands
-
-def ai_search(query: str, goods: list, top_k: int | None = None):
-    load_model()
-
-    BRANDS = build_brand_dict(goods)
-    CATEGORIES = set(normalize(g["category"]) for g in goods)
-
-    query_original, query_translit = normalize_with_translit(query)
-
-    query_versions = [query_original, query_translit]
-
-    names = [normalize(g["name"]) for g in goods]
-
-    X = vectorizer.transform(names)
-    ml_probs = model.predict_proba(X)[:, 1]
-
-    results = []
-
-    for i, item in enumerate(goods):
-
-        name_original, name_translit = normalize_with_translit(item["name"])
-        name_versions = [name_original, name_translit]
-
-        fuzzy_score = max(
-            fuzz.partial_ratio(q, n) / 100
-            for q in query_versions
-            for n in name_versions
+        texts = [self._prepare_text(item) for item in items]
+        self._embeddings = self.model.encode(
+            texts, convert_to_numpy=True, show_progress_bar=False
         )
+        print(f"[Search] Индекс готов: {self._embeddings.shape}")
 
-        category_score = category_match_score(query, item["category"])
+    def invalidate(self):
+        self._last_count = -1
+        print("[Search] Индекс инвалидирован.")
 
-        ml_prob = ml_probs[i]
+    def search(self, query: str) -> List[Dict]:
+        if not self._items or self._embeddings is None or self._embeddings.size == 0:
+            return []
 
-        score = (
-            0.35 * fuzzy_score +
-            0.25 * ml_prob +
-            0.40 * category_score
-        )
+        query_embedding = self.model.encode(["query: " + query], convert_to_numpy=True)
+        similarities = cosine_similarity(query_embedding, self._embeddings).flatten()
 
-        if score > 0.55:
-            results.append({
-                "item": item,
-                "score": score
-            })
+        query_lower = query.lower()
+        query_words = [w for w in query_lower.split() if len(w) >= 2]
 
-    results.sort(key=lambda x: x["score"], reverse=True)
+        scored = []
+        for i, item in enumerate(self._items):
+            score = float(similarities[i])
+            item_name_lower = item["name"].lower()
 
-    if top_k:
-        results = results[:top_k]
+            effective_min = MIN_SCORE
+            for word in query_words:
+                if word in item_name_lower:
+                    effective_min -= 0.05
+                    break
+                elif fuzz.partial_ratio(word, item_name_lower) > 88:
+                    effective_min -= 0.025
+                    break
 
-    return results
+            if score >= effective_min:
+                result = item.copy()
+                result["search_score"] = round(score, 4)
+                scored.append(result)
 
-def category_match_score(query, category):
-    q = normalize(query)
-    c = normalize(category)
+        scored.sort(key=lambda x: x["search_score"], reverse=True)
+        top = scored[:MAX_RESULTS]
 
-    if q == c: return 1.0
+        if not top:
+            return []
 
-    if q in c or c in q: return 0.9
+        for i in range(1, len(top)):
+            gap = top[i - 1]["search_score"] - top[i]["search_score"]
+            if gap >= GAP_CUTOFF:
+                top = top[:i]
+                break
 
-    score = fuzz.partial_ratio(q, c) / 100
+        top = [r for r in top if r["search_score"] >= MIN_SCORE]
 
-    if score > 0.7: return score
+        return top
 
-    q_words = set(q.split())
-    c_words = set(c.split())
-
-    if q_words & c_words: return 0.6
-
-    return 0
+search_engine = SemanticSearchEngine()

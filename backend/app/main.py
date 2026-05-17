@@ -4,17 +4,36 @@ from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy.orm import joinedload
 from contextlib import asynccontextmanager
 import traceback, sys
 
-from app.core.database import engine
+from app.core.database import engine, SessionLocal
 from app.core.init_db import init_database
 from app.db.models import *
+from app.services.search_service import search_engine
 from app.api import auth, admin, warehouses, categories, items, cart, orders, suppliers, users, purchases, activity_logs
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_database()
+    print("[Startup] Инициализация индекса поиска...")
+    db = SessionLocal()
+    try:
+        items = db.query(Item).options(joinedload(Item.category)).all()
+        goods = [
+            {
+                "id": item.id,
+                "name": item.name,
+                "description": item.description or "",
+                "category_name": item.category.name if item.category else "",
+            }
+            for item in items
+        ]
+        search_engine.update_index(goods)
+        print(f"[Startup] Индекс готов: {len(goods)} товаров")
+    finally:
+        db.close()
     yield
 
 app = FastAPI(lifespan=lifespan)
