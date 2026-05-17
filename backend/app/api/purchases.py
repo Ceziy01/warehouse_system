@@ -9,7 +9,7 @@ from app.db.models.item import Item
 from app.db.models.category import Category
 from app.db.models.suppliers import Supplier
 from app.db.models.warehouse import Warehouse
-from app.schemas.purchase import PurchaseOrderCreate, PurchaseOrderUpdate, PurchaseOrderResponse, CompletePurchaseRequest
+from app.schemas.purchase import PurchaseOrderCreate, PurchaseOrderResponse, CompletePurchaseRequest
 from app.db.models.activity_log import ActionType
 from app.services.activity_log import log_action
 

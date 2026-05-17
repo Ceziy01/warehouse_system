@@ -110,7 +110,7 @@ function PurchaseCreateModal({ onClose, onSave }) {
               </select>
             </div>
             <div className="input-group">
-              <label>Поставщик *</label>
+              <label>Склад *</label>
               <select
                 value={form.warehouse_id}
                 onChange={e => setForm({ ...form, warehouse_id: e.target.value })}

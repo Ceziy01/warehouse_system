@@ -1,0 +1,1 @@
+docker exec -it warehouse-db psql -U warehouse_guard -d warehouse

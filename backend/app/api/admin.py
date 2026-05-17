@@ -2,10 +2,9 @@ from typing import Annotated, List
 from fastapi import APIRouter, Depends, HTTPException, Request, UploadFile, File
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
-import os, subprocess
 from pathlib import Path
 from datetime import datetime, timedelta
-import shutil
+import os, subprocess, shutil
 
 from app.core.dependencies import require_admin, get_db
 from app.schemas.auth import CreateUserRequest, UpdateUserRequest

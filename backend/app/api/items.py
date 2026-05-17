@@ -20,10 +20,8 @@ def list_items(
     db: Annotated[Session, Depends(get_db)],
     user: Annotated[Users, Depends(require_any_authenticated)]
 ):
-    items = db.query(Item).options(
-        joinedload(Item.category),
-        joinedload(Item.warehouse)
-    ).all()
+    items = db.query(Item).options(joinedload(Item.category), joinedload(Item.warehouse)).order_by(Item.id.asc()).all()
+    
     result = []
     for item in items:
         item_data = ItemResponse.model_validate(item)

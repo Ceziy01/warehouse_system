@@ -1,6 +1,7 @@
-from app.core.database import Base
 from enum import Enum
-from sqlalchemy import Column, Integer, String, Boolean, Enum as SqlEnum
+from sqlalchemy import Column, Integer, String, Enum as SqlEnum
+
+from app.core.database import Base
 
 class UserRole(str, Enum):
     ADMIN = "admin"

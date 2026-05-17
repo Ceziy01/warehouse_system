@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+
 from app.db.models.activity_log import ActivityLog, ActionType
 from app.db.models.user import Users
 
