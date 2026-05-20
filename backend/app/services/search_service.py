@@ -9,10 +9,7 @@ MODEL_DIR = os.environ.get("MODEL_DIR", "/app/ml_models")
 MODEL_NAME = "intfloat/multilingual-e5-large"
 LOCAL_MODEL_PATH = os.path.join(MODEL_DIR, "multilingual-e5-large")
 
-#минимальна рлевантность
 MIN_SCORE = 0.76
-#ограничение по результатам
-MAX_RESULTS = 20
 
 GAP_CUTOFF = 0.05
 
@@ -103,19 +100,18 @@ class SemanticSearchEngine:
                 scored.append(result)
 
         scored.sort(key=lambda x: x["search_score"], reverse=True)
-        top = scored[:MAX_RESULTS]
 
-        if not top:
+        if not scored:
             return []
 
-        for i in range(1, len(top)):
-            gap = top[i - 1]["search_score"] - top[i]["search_score"]
+        for i in range(1, len(scored)):
+            gap = scored[i - 1]["search_score"] - scored[i]["search_score"]
             if gap >= GAP_CUTOFF:
-                top = top[:i]
+                scored = scored[:i]
                 break
 
-        top = [r for r in top if r["search_score"] >= MIN_SCORE]
+        scored = [r for r in scored if r["search_score"] >= MIN_SCORE]
 
-        return top
+        return scored
 
 search_engine = SemanticSearchEngine()
