@@ -89,60 +89,70 @@ function CompletePurchaseModal({ purchase, onClose, onSave }) {
         <h3>Завершение закупки: {purchase.product_name}</h3>
         <form onSubmit={handleSubmit}>
           <div className="form-row">
-            <input
-              type="text"
-              className="modal-input"
-              placeholder="Артикул *"
-              value={form.article}
-              onChange={e => setForm({ ...form, article: e.target.value })}
-              required
-            />
+            <div className="input-group">
+              <label>Артикул *</label>
+              <input
+                type="text"
+                placeholder="Артикул"
+                value={form.article}
+                onChange={e => setForm({ ...form, article: e.target.value })}
+                required
+              />
+            </div>
           </div>
           <div className="form-row">
-            <textarea
-              className="modal-input"
-              placeholder="Описание"
-              value={form.description}
-              onChange={e => setForm({ ...form, description: e.target.value })}
-              rows="3"
-            />
+            <div className="input-group">
+              <label>Описание</label>
+              <textarea
+                placeholder="Описание"
+                value={form.description}
+                onChange={e => setForm({ ...form, description: e.target.value })}
+                rows="3"
+              />
+            </div>
           </div>
-          <div className="form-row" style={{ gap: "10px" }}>
-            <input
-              type="text"
-              className="modal-input"
-              placeholder="Единица измерения *"
-              value={form.unit}
-              onChange={e => setForm({ ...form, unit: e.target.value })}
-              required
-            />
-            <input
-              type="number"
-              className="modal-input"
-              placeholder="Срок годности (дни)"
-              value={form.shelf_life_days}
-              onChange={e => setForm({ ...form, shelf_life_days: e.target.value })}
-            />
+          <div className="form-row">
+            <div className="input-group">
+              <label>Единица измерения *</label>
+              <input
+                type="text"
+                value={form.unit}
+                onChange={e => setForm({ ...form, unit: e.target.value })}
+                required
+              />
+            </div>
+            <div className="input-group">
+              <label>Срок годности (дни)</label>
+              <input
+                type="number"
+                placeholder="Срок годности"
+                value={form.shelf_life_days}
+                onChange={e => setForm({ ...form, shelf_life_days: e.target.value })}
+              />
+            </div>
           </div>
-          <div className="form-row" style={{ gap: "10px" }}>
-            <input
-              type="number"
-              className="modal-input"
-              placeholder="Цена продажи (₽) *"
-              value={form.selling_price}
-              onChange={e => setForm({ ...form, selling_price: parseFloat(e.target.value) || 0 })}
-              min="0"
-              step="1"
-              required
-            />
-            <select
-              className="modal-input"
-              value={form.category_id}
-              onChange={e => setForm({ ...form, category_id: e.target.value })}
-            >
-              <option value="">Категория (необязательно)</option>
-              {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </select>
+          <div className="form-row">
+            <div className="input-group">
+              <lable>Цена продажи (₽) *</lable>
+              <input
+                type="number"
+                value={form.selling_price}
+                onChange={e => setForm({ ...form, selling_price: parseFloat(e.target.value) || 0 })}
+                min="0"
+                step="1"
+                required
+              />
+            </div>
+            <div className="input-group">
+              <lable>Категория</lable>
+              <select
+                value={form.category_id}
+                onChange={e => setForm({ ...form, category_id: e.target.value })}
+              >
+                <option value="">Категория (необязательно)</option>
+                {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+              </select>
+            </div>
           </div>
           <div className="form-row">
             <input type="file" onChange={handleFileUpload} />
