@@ -8,11 +8,12 @@ import ActionButton from "../../components/ActionButton/ActionButton";
 import "../../styles/shared.css";
 
 const statusMap = {
-  created: "Создан",
-  confirmed: "Подтверждён",
-  cancelled: "Отменён",
-  on_the_way: "В пути",
-  delivered: "Доставлен"
+    CREATED: "Создан",
+    CONFIRMED: "Подтверждён",
+    CANCELLED: "Отменён",
+    ON_THE_WAY: "В пути",
+    DELIVERED: "Доставлен",
+    PAID: "Оплачен",
 };
 
 function OrdersManagePage({ readOnly = false }) {
@@ -77,7 +78,7 @@ function OrdersManagePage({ readOnly = false }) {
     return (
         <div className="container">
             <div className="page-header">
-                <PageHeader icon="assignment" title="Управление заказами"/>
+                <PageHeader icon="assignment" title="Управление заказами" />
                 <ActionButton type="excel" tip="Экспорт в Excel" onClick={handleExport}>
                     <span className="material-symbols-outlined">table_view</span>
                 </ActionButton>
@@ -103,11 +104,12 @@ function OrdersManagePage({ readOnly = false }) {
                                         className="table-select"
                                         style={{ width: 'auto', minWidth: '140px' }}
                                     >
-                                        <option value="created">Создан</option>
-                                        <option value="confirmed">Подтверждён</option>
-                                        <option value="cancelled">Отменён</option>
-                                        <option value="on_the_way">В пути</option>
-                                        <option value="delivered">Доставлен</option>
+                                        <option value="CREATED">Создан</option>
+                                        <option value="CONFIRMED">Подтверждён</option>
+                                        <option value="CANCELLED">Отменён</option>
+                                        <option value="ON_THE_WAY">В пути</option>
+                                        <option value="DELIVERED">Доставлен</option>
+                                        <option value="PAID">Оплачен</option>
                                     </select>
                                     <ActionButton
                                         type="danger"

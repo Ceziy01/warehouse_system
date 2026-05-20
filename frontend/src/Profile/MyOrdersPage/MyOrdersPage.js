@@ -8,11 +8,12 @@ import ActionButton from "../../components/ActionButton/ActionButton";
 import "../../styles/shared.css";
 
 const statusMap = {
-  created: "Создан",
-  confirmed: "Подтверждён",
-  cancelled: "Отменён",
-  on_the_way: "В пути",
-  delivered: "Доставлен"
+  CREATED: "Создан",
+  CONFIRMED: "Подтверждён",
+  CANCELLED: "Отменён",
+  ON_THE_WAY: "В пути",
+  DELIVERED: "Доставлен",
+  PAID: "Оплачен",
 };
 
 function MyOrdersPage() {

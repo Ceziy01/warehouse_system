@@ -5,11 +5,12 @@ from app.core.database import Base
 import enum
 
 class OrderStatus(str, enum.Enum):
-    CREATED = "created"
-    CONFIRMED = "confirmed"
-    CANCELLED = "cancelled"
-    ON_THE_WAY = "on_the_way"
-    DELIVERED = "delivered"
+    CREATED = "CREATED"
+    CONFIRMED = "CONFIRMED"
+    CANCELLED = "CANCELLED"
+    ON_THE_WAY = "ON_THE_WAY"
+    DELIVERED = "DELIVERED"
+    PAID = "PAID"
 
 class Order(Base):
     __tablename__ = "orders"
