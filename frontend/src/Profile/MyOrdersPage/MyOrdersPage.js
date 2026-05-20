@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import PageHeader from "../../components/PageHeader/PageHeader";
@@ -6,6 +7,7 @@ import { fetchWithAuth } from "../../utils/api";
 import { exportOrdersToExcel } from "../../utils/export";
 import ActionButton from "../../components/ActionButton/ActionButton";
 import "../../styles/shared.css";
+import "../PaymentPage/PaymentPage.css";
 
 const statusMap = {
   CREATED: "Создан",
@@ -19,6 +21,7 @@ const statusMap = {
 function MyOrdersPage() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     loadOrders();
@@ -63,7 +66,17 @@ function MyOrdersPage() {
               <strong>Заказ #{order.id}</strong>
               <span>Статус: {statusMap[order.status] || order.status}</span>
               <span>Дата: {new Date(order.created_at).toLocaleString()}</span>
-              <strong>Сумма: {order.total_price} ₽</strong>
+              <strong>Сумма: {order.total_price.toLocaleString("ru-RU")} ₽</strong>
+
+              {order.status === "CONFIRMED" && (
+                <button
+                  className="pay-order-btn"
+                  onClick={() => navigate(`/payment/${order.id}`)}
+                >
+                  <span className="material-symbols-outlined">credit_card</span>
+                  Оплатить
+                </button>
+              )}
             </div>
             <table className="table">
               <thead>

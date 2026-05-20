@@ -14,6 +14,7 @@ import CatalogPage from "./CatalogPage/CatalogPage";
 import ClientsPage from "./ClientsPage/ClientsPage";
 import PurchasesPage from "./PurchasesPage/PurchasesPage";
 import BackupPage from "./BackupPage/BackupPage";
+import PaymentPage from "./PaymentPage/PaymentPage";
 import Sidebar from "./Sidebar";
 import ActivityLogPage from "./ActivityLogPage/ActivityLogPage";
 import "./ProfileLayout.css";
@@ -42,10 +43,10 @@ function ProfileLayout() {
           <Route path="/" element={<Navigate to="/info" replace />} />
           <Route path="/info" element={<ProfileInfo />} />
 
-          {isAdmin && <Route path="/users" element={<UsersPage />}/>}
-          {isAdmin && <Route path="/activity-log" element={<ActivityLogPage/>}/>}
+          {isAdmin && <Route path="/users" element={<UsersPage />} />}
+          {isAdmin && <Route path="/activity-log" element={<ActivityLogPage />} />}
           {isAdmin && <Route path="/backup" element={<BackupPage />} />}
-          
+
 
           <Route
             path="/items"
@@ -186,6 +187,14 @@ function ProfileLayout() {
           />
 
           <Route path="*" element={<Navigate to="/info" replace />} />
+          <Route
+            path="/payment/:orderId"
+            element={
+              <ProtectedRoute allowedRoles={["customer"]}>
+                <PaymentPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </div>
     </div>

@@ -1,0 +1,355 @@
+.payment-page {
+  min-height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+.payment-wrapper {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+  width: 100%;
+  max-width: 860px;
+}
+
+@media (max-width: 720px) {
+  .payment-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+.payment-summary {
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 24px;
+  height: fit-content;
+}
+
+.summary-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.summary-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--text-primary);
+}
+
+.summary-icon {
+  color: var(--primary);
+  font-size: 24px;
+}
+
+.summary-items {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+
+.summary-item-name {
+  flex: 1;
+  color: var(--text-primary);
+}
+
+.summary-item-qty {
+  color: var(--text-secondary);
+}
+
+.summary-item-price {
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-light);
+  font-size: 16px;
+  color: var(--text-secondary);
+}
+
+.summary-total strong {
+  font-size: 20px;
+  color: var(--primary);
+}
+
+.payment-form {
+  background: var(--card-bg);
+  border: 1px solid var(--border-light);
+  border-radius: 20px;
+  padding: 28px;
+}
+
+.form-title {
+  margin: 0 0 20px;
+  font-size: 18px;
+  color: var(--text-primary);
+}
+
+.card-visual {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover, #6aaf6a) 100%);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 24px;
+  color: #fff;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card-chip {
+  display: flex;
+  align-items: center;
+}
+
+.card-chip .material-symbols-outlined {
+  font-size: 28px;
+  opacity: 0.9;
+}
+
+.card-number-display {
+  font-size: 17px;
+  letter-spacing: 2px;
+  font-family: monospace;
+  opacity: 0.95;
+  margin: 8px 0;
+}
+
+.card-meta {
+  display: flex;
+  gap: 32px;
+}
+
+.card-label {
+  font-size: 10px;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.card-value {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-family: monospace;
+}
+
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-group label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.payment-input {
+  background: var(--input-bg, var(--surface-variant));
+  border: 1px solid var(--input-border, var(--border-light));
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 15px;
+  color: var(--text-primary);
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+  font-family: monospace;
+}
+
+.payment-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.payment-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.pay-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--primary);
+  color: var(--on-primary, #fff);
+  border: none;
+  border-radius: 12px;
+  padding: 13px 20px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.pay-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.pay-btn .material-symbols-outlined {
+  font-size: 18px;
+}
+
+.cancel-pay-btn {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 11px 20px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.cancel-pay-btn:hover {
+  background: var(--surface-variant);
+}
+
+.payment-secure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-disabled, var(--text-secondary));
+  opacity: 0.7;
+}
+
+.payment-secure .material-symbols-outlined {
+  font-size: 16px;
+}
+
+.payment-processing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 80px 24px;
+  color: var(--text-primary);
+}
+
+.payment-processing h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.payment-processing p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.processing-spinner {
+  width: 52px;
+  height: 52px;
+  border: 4px solid var(--border-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.payment-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 80px 24px;
+  text-align: center;
+  color: var(--text-primary);
+}
+
+.success-icon-wrap {
+  animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.success-icon {
+  font-size: 72px;
+  color: var(--primary);
+}
+
+.payment-success h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.payment-success p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+@keyframes pop {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+/* ── Кнопка оплаты в карточке заказа ── */
+.pay-order-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary);
+  color: var(--on-primary, #fff);
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  white-space: nowrap;
+}
+
+.pay-order-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.pay-order-btn .material-symbols-outlined {
+  font-size: 16px;
+}

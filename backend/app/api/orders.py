@@ -128,3 +128,33 @@ def delete_order(
     db.delete(order)
     db.commit()
     return None
+
+@router.post("/{order_id}/pay", response_model=OrderResponse)
+def pay_order(
+    order_id: int,
+    db: Annotated[Session, Depends(get_db)],
+    current_user: Annotated[Users, Depends(get_current_user)],
+    req: Request = None
+):
+    order = db.query(Order).filter(
+        Order.id == order_id,
+        Order.user_id == current_user.id
+    ).first()
+    if not order:
+        raise HTTPException(404, "Заказ не найден")
+
+    if order.status != OrderStatus.CONFIRMED:
+        raise HTTPException(400, "Заказ должен быть в статусе 'Подтверждён'")
+
+    order.status = OrderStatus.PAID
+    db.commit()
+    db.refresh(order)
+
+    log_action(
+        db, current_user, ActionType.ORDER_STATUS_CHANGED,
+        entity_type="order", entity_id=order.id,
+        entity_name=f"Заказ #{order.id}",
+        ip_address=req.client.host if req else None
+    )
+
+    return _build_order_response(order)
