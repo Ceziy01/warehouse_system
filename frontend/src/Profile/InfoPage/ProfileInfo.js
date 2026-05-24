@@ -9,21 +9,8 @@ import ChangePasswordModal from "./ChangePasswordModal";
 import "./ProfileInfo.css";
 
 function ProfileInfo() {
-  const { user: authUser } = useAuth();
-  const [user, setUser] = useState(authUser);
+  const { user, loading } = useAuth();
   const [modalOpen, setModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (!user) {
-      fetchWithAuth("/auth/users/me")
-        .then((res) => {
-          if (!res.ok) throw new Error("Failed to load profile");
-          return res.json();
-        })
-        .then(setUser)
-        .catch(() => toast.error("Не удалось загрузить профиль"));
-    }
-  }, [user]);
 
   const handleChangePassword = async (oldPassword, newPassword) => {
     const res = await fetchWithAuth("/auth/users/me/change-password", {
@@ -40,6 +27,9 @@ function ProfileInfo() {
     toast.success("Пароль успешно изменён");
     setModalOpen(false);
   };
+
+  if (loading) return <div>Загрузка...</div>;
+  if (!user) return null;
 
   return (
     <div>

@@ -10,31 +10,38 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("token");
+
+  const fetchMe = (accessToken) => {
+    return fetch(`${API_BASE_URL}/auth/users/me`, {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
+      .then(res => {
+        if (!res.ok) throw new Error("Unauthorized");
+        return res.json();
+      })
+      .then(userData => setUser(userData))
+      .catch(() => {
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        setUser(null);
+      })
+      .finally(() => setLoading(false));
+  };
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     if (token) {
-      fetch(`${API_BASE_URL}/auth/users/me`, {
-        headers: { Authorization: `Bearer ${token}` }
-      })
-        .then(res => res.json())
-        .then(userData => {
-          setUser(userData);
-        })
-        .catch(() => {
-          localStorage.removeItem("token");
-          setUser(null);
-        })
-        .finally(() => setLoading(false));
+      fetchMe(token);
     } else {
       setLoading(false);
     }
-  }, [token]);
+  }, []);
 
   useEffect(() => {
     const handleUnauthorized = () => {
-      setUser(null);
       localStorage.removeItem("token");
+      localStorage.removeItem("refreshToken");
+      setUser(null);
     };
     window.addEventListener("unauthorized", handleUnauthorized);
     return () => window.removeEventListener("unauthorized", handleUnauthorized);

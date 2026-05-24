@@ -5,11 +5,19 @@ let refreshPromise = null;
 export async function refreshAccessToken() {
   const refreshToken = localStorage.getItem("refreshToken");
   if (!refreshToken) throw new Error("No refresh token");
-
   if (refreshPromise) return refreshPromise;
+  const refreshingAt = localStorage.getItem("tokenRefreshingAt");
+  const now = Date.now();
+  if (refreshingAt && now - parseInt(refreshingAt) < 5000) {
+    await new Promise(r => setTimeout(r, 500));
+    const newToken = localStorage.getItem("token");
+    if (newToken) return newToken;
+  }
 
   refreshPromise = (async () => {
     try {
+      localStorage.setItem("tokenRefreshingAt", String(Date.now()));
+
       const res = await fetch(`${API_BASE_URL}/auth/refresh`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -23,6 +31,7 @@ export async function refreshAccessToken() {
       localStorage.setItem("refreshToken", data.refresh_token);
       return data.access_token;
     } finally {
+      localStorage.removeItem("tokenRefreshingAt");
       refreshPromise = null;
     }
   })();

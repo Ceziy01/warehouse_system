@@ -76,6 +76,10 @@ logs/
 keys
 keys.pub
 
+
+*.pem
+certs/
+
 # Модель (качается автоматически в volume)
 backend/ml_models/
 

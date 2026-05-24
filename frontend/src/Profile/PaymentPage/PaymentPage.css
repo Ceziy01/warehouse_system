@@ -328,7 +328,6 @@
   to   { transform: scale(1); opacity: 1; }
 }
 
-/* ── Кнопка оплаты в карточке заказа ── */
 .pay-order-btn {
   display: inline-flex;
   align-items: center;

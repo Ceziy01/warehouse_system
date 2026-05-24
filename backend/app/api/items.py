@@ -160,13 +160,11 @@ def search_items(
     db: Annotated[Session, Depends(get_db)],
     user: Annotated[Users, Depends(require_any_authenticated)]
 ):
-    # Загружаем все товары с категориями для индексации
     all_items = db.query(Item).options(
         joinedload(Item.category),
         joinedload(Item.warehouse)
     ).all()
 
-    # Формируем список dict для движка поиска
     goods = [
         {
             "id": item.id,
@@ -177,17 +175,14 @@ def search_items(
         for item in all_items
     ]
 
-    # Обновляем индекс (пересчёт только если изменилось кол-во товаров)
     search_engine.update_index(goods)
 
-    # Поиск — возвращает только релевантные, без фиксированного top_k
     results = search_engine.search(query)
     result_ids = {r["id"] for r in results}
 
     if not result_ids:
         return []
 
-    # Сохраняем порядок по score
     score_map = {r["id"]: r["search_score"] for r in results}
 
     matched = db.query(Item).options(
@@ -202,6 +197,5 @@ def search_items(
         r.warehouse_name = item.warehouse.name if item.warehouse else None
         response.append(r)
 
-    # Сортируем по score из движка
     response.sort(key=lambda x: score_map.get(x.id, 0), reverse=True)
     return response
