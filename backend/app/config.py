@@ -12,7 +12,7 @@ class Settings(BaseSettings):
 
     JWT_KEY: str = os.getenv("JWT_KEY")
     JWT_ALG: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
 '''if not Path(".env").exists():
     raise FileNotFoundError(".env не найден!")'''
