@@ -124,7 +124,7 @@ function PurchaseCreateModal({ onClose, onSave }) {
 
           <div className="modal-actions">
             <button type="button" className="modal-btn secondary" onClick={onClose}>Отмена</button>
-            <button type="submit" className="modal-btn primary" disabled={loading}>
+            <button type="submit" className="primary-btn" disabled={loading}>
               {loading ? "Создание..." : "Создать"}
             </button>
           </div>

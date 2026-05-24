@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../UsersPage/ResetPasswordModal.css";
+import "../../styles/shared.css";
 import toast from "react-hot-toast";
 
 function ChangePasswordModal({ isOpen, onClose, onConfirm }) {
@@ -52,7 +52,7 @@ function ChangePasswordModal({ isOpen, onClose, onConfirm }) {
 
         <div className="modal-actions">
           <button className="modal-btn secondary" onClick={onClose}>Отмена</button>
-          <button className="modal-btn primary" onClick={handleSubmit}>Сменить пароль</button>
+          <button className="primary-btn" onClick={handleSubmit}>Сменить пароль</button>
         </div>
       </div>
     </div>

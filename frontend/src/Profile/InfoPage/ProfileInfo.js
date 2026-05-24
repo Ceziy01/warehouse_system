@@ -32,7 +32,7 @@ function ProfileInfo() {
     });
 
     if (!res.ok) {
-      const error = await res.json();
+      await res.json();
       toast.error("Ошибка смены пароля");
       return;
     }
@@ -44,7 +44,7 @@ function ProfileInfo() {
   return (
     <div>
       <div className="page-header">
-        <PageHeader icon="account_circle" title="Информация об аккаунте"/>
+        <PageHeader icon="account_circle" title="Информация"/>
         <button className="primary-btn" onClick={() => setModalOpen(true)}>Сменить пароль</button>
       </div>
 

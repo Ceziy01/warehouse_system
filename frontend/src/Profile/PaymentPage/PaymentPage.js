@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+
 import { fetchWithAuth } from "../../utils/api";
 import "../../styles/shared.css";
 import "./PaymentPage.css";
@@ -51,8 +53,21 @@ function PaymentPage() {
 
     const handleCardChange = (field, value) => {
         if (field === "number") value = formatCardNumber(value);
-        if (field === "expiry") value = formatExpiry(value);
+        if (field === "name") {
+            value = value.replace(/[^A-Za-zА-Яа-яЁё\s]/g, "").toUpperCase();
+        }
+
+        if (field === "expiry") {
+            value = formatExpiry(value);
+            const digits = value.replace(/\D/g, "");
+            if (digits.length >= 2) {
+                const month = parseInt(digits.slice(0, 2));
+                if (month < 1 || month > 12) return;
+            }
+        }
+
         if (field === "cvv") value = value.replace(/\D/g, "").slice(0, 3);
+
         setCard((prev) => ({ ...prev, [field]: value }));
     };
 
@@ -61,6 +76,13 @@ function PaymentPage() {
         if (digits.length < 16) return alert("Введите корректный номер карты");
         if (!card.name.trim()) return alert("Введите имя держателя карты");
         if (card.expiry.length < 5) return alert("Введите срок действия карты");
+        const [month, year] = card.expiry.split("/");
+        const expDate = new Date(2000 + parseInt(year), parseInt(month) - 1);
+        const now = new Date();
+        if (expDate < new Date(now.getFullYear(), now.getMonth())) {
+            toast.error("Срок действия карты истёк");
+        }
+
         if (card.cvv.length < 3) return alert("Введите CVV");
 
         setStep("processing");

@@ -78,7 +78,7 @@ function OrdersManagePage({ readOnly = false }) {
     return (
         <div className="container">
             <div className="page-header">
-                <PageHeader icon="assignment" title="Управление заказами" />
+                <PageHeader icon="assignment" title="Заказы" />
                 <ActionButton type="excel" tip="Экспорт в Excel" onClick={handleExport}>
                     <span className="material-symbols-outlined">table_view</span>
                 </ActionButton>
@@ -122,26 +122,28 @@ function OrdersManagePage({ readOnly = false }) {
                                 </div>
                             )}
                         </div>
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th>Товар</th>
-                                    <th>Кол-во</th>
-                                    <th>Цена</th>
-                                    <th>Сумма</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {order.items.map(item => (
-                                    <tr key={item.id}>
-                                        <td>{item.name}</td>
-                                        <td>{item.quantity}</td>
-                                        <td>{item.price_at_time} ₽</td>
-                                        <td>{item.price_at_time * item.quantity} ₽</td>
+                        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th>Товар</th>
+                                        <th>Кол-во</th>
+                                        <th>Цена</th>
+                                        <th>Сумма</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    {order.items.map(item => (
+                                        <tr key={item.id}>
+                                            <td>{item.name}</td>
+                                            <td>{item.quantity}</td>
+                                            <td>{item.price_at_time} ₽</td>
+                                            <td>{item.price_at_time * item.quantity} ₽</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 ))
             )}

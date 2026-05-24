@@ -4,7 +4,6 @@ import { Toaster } from "react-hot-toast";
 import { AuthProvider, useAuth } from "./Auth/AuthContext";
 import Login from "./Auth/Login";
 import ProfileLayout from "./Profile/ProfileLayout";
-import "./App.css";
 
 function AppRoutes() {
   const { isAuthenticated, loading } = useAuth();

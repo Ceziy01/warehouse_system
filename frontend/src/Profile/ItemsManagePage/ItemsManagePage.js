@@ -26,7 +26,7 @@ function ItemsManagePage() {
 
   const handleExport = () => {
     if (tableRef.current) {
-      exportTableToExcel(tableRef.current, `товары_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}`);
+      exportTableToExcel(tableRef.current, `товары_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}`);
     }
   };
 
@@ -100,32 +100,35 @@ function ItemsManagePage() {
 
   return (
     <div className="container">
-      <div className="items-header">
+      <div className="page-header">
         <PageHeader icon="inventory_2" title="Товары" />
-        <div className="search-section">
-          <ActionButton type="excel" tip="Экспорт в Excel" onClick={handleExport}>
-            <span className="material-symbols-outlined">table_view</span>
-          </ActionButton>
-          <div className="search-wrapper">
-            <input
-              type="text"
-              placeholder="Поиск"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && searchItems()}
-              className="search-input"
-            />
-            {searchQuery && (
-              <button onClick={resetSearch} className="search-clear">
-                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>close</span>
-              </button>
-            )}
-          </div>
-          <button className="primary-btn" onClick={searchItems}>Найти</button>
+        <div className="header-actions">
           {canEdit && (
             <button className="primary-btn" onClick={openCreateModal}>Добавить товар</button>
           )}
+          <ActionButton type="excel" tip="Экспорт в Excel" onClick={handleExport}>
+            <span className="material-symbols-outlined">table_view</span>
+          </ActionButton>
         </div>
+      </div>
+
+      <div className="search-section" style={{ marginBottom: '16px' }}>
+        <div className="search-wrapper">
+          <input
+            type="text"
+            placeholder="Поиск"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && searchItems()}
+            className="search-input"
+          />
+          {searchQuery && (
+            <button onClick={resetSearch} className="search-clear">
+              <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>close</span>
+            </button>
+          )}
+        </div>
+        <button className="primary-btn search-btn" onClick={searchItems}>Найти</button>
       </div>
 
       <table ref={tableRef} className="table items-table">
@@ -160,7 +163,7 @@ function ItemsManagePage() {
               {canEdit && (
                 <td>
                   <div className="actions-container">
-                    <ActionButton type="extra" onClick={() => { setSelectedImage(item.image_url); setImageModalOpen(true); }} tip="Предпросмотр"><span className="material-symbols-outlined">visibility</span></ActionButton> 
+                    <ActionButton type="extra" onClick={() => { setSelectedImage(item.image_url); setImageModalOpen(true); }} tip="Предпросмотр"><span className="material-symbols-outlined">visibility</span></ActionButton>
                     <ActionButton type="danger" onClick={() => handleDelete(item.id)} tip="Удалить"><span className="material-symbols-outlined">delete</span></ActionButton>
                     <ActionButton type="neutral" onClick={() => openEditModal(item)} tip="Редактировать"><span className="material-symbols-outlined">edit</span></ActionButton>
                   </div>

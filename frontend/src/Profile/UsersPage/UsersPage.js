@@ -19,6 +19,8 @@ function UsersPage() {
     email: "",
     role: "customer"
   });
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const nameRegex = /^[a-zA-Zа-яА-ЯёЁ]+$/;
 
   const [username, setUsername] = useState("");
   const [firstName, setFirstname] = useState("");
@@ -45,7 +47,7 @@ function UsersPage() {
         localStorage.setItem("token", data.access_token);
         window.location.href = "/info";
       } else {
-        const error = await res.json();
+        await res.json();
         toast.error("Ошибка входа")
       }
     } catch (error) {
@@ -75,6 +77,21 @@ function UsersPage() {
 
     if (!username.trim() || !firstName.trim() || !lastName.trim() || !email.trim() || !password.trim()) {
       toast.error("Заполните все поля");
+      return;
+    }
+
+    if (!emailRegex.test(email)) {
+      toast.error("Введите коррекный email");
+      return;
+    }
+
+    if (!nameRegex.test(firstName)) {
+      toast.error("Введите коррекное имя");
+      return;
+    }
+
+    if (!nameRegex.test(lastName)) {
+      toast.error("Введите коррекную фамилию");
       return;
     }
 
@@ -157,7 +174,7 @@ function UsersPage() {
     });
 
     if (!res.ok) {
-      const error = await res.json();
+      await res.json();
       toast.error("Не удалось обновить пользователя")
       return;
     }
@@ -190,7 +207,7 @@ function UsersPage() {
     });
 
     if (!res.ok) {
-      const error = await res.json();
+      await res.json();
       toast.error("Не удалось сменить пароль")
       return;
     }
@@ -353,7 +370,7 @@ function UsersPage() {
                 </select>
               </td>
               <td>
-                <button type="submit" className="primary-btn">Добавить</button>
+                <button type="submit" className="primary-btn" style={{width: '100%'}}>Добавить</button>
               </td>
             </tr>
           </tbody>

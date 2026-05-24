@@ -1,12 +1,5 @@
 @import "../../styles/shared.css";
 
-.items-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
 .items-table {
   min-width: 1000px;
 }
@@ -18,18 +11,6 @@
 
 .items-table td {
   font-size: 13px;
-}
-
-.search-section {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.search-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
 }
 
 .search-input {
@@ -94,3 +75,4 @@
   max-width: 100%;
   max-height: 70vh;
 }
+

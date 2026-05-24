@@ -12,12 +12,11 @@ import "../../styles/shared.css";
 
 function PurchasesPage() {
   const { user } = useAuth();
-  const [allPurchases, setAllPurchases] = useState([]); // все закупки
+  const [allPurchases, setAllPurchases] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [warehouses, setWarehouses] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Состояние фильтров
   const [filters, setFilters] = useState({
     supplier_id: "",
     warehouse_id: "",
@@ -40,7 +39,6 @@ function PurchasesPage() {
 
   const tableRef = useRef(null);
 
-  // Загрузка всех закупок, поставщиков и складов
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
@@ -68,13 +66,9 @@ function PurchasesPage() {
 
   const filteredPurchases = allPurchases.filter((p) => {
     if (filters.supplier_id && String(p.supplier_id) !== filters.supplier_id) return false;
-
     if (filters.warehouse_id && String(p.warehouse_id) !== filters.warehouse_id) return false;
-
     if (filters.status && p.status !== filters.status) return false;
-
     if (filters.date_from && new Date(p.created_at) < new Date(filters.date_from)) return false;
-
     if (filters.date_to && new Date(p.created_at) > new Date(filters.date_to)) return false;
     return true;
   });
@@ -189,7 +183,7 @@ function PurchasesPage() {
   return (
     <div className="container">
       <div className="page-header">
-        <PageHeader icon="shopping_bag" title="Управление закупками" />
+        <PageHeader icon="shopping_bag" title="Закупки" />
         <div style={{ display: "flex", gap: "10px" }}>
           {canEdit && (
             <button className="primary-btn" onClick={handleCreate}>
@@ -202,7 +196,6 @@ function PurchasesPage() {
         </div>
       </div>
 
-      {/* Панель фильтров */}
       <div className="filters-panel">
         <div className="filters-row">
           <div className="filter-group">

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import "./ResetPasswordModal.css";
+import "../../styles/shared.css";
 
 function ResetPasswordModal({ isOpen, onClose, onConfirm, username }) {
   const [newPassword, setNewPassword] = useState("");
@@ -46,7 +46,7 @@ function ResetPasswordModal({ isOpen, onClose, onConfirm, username }) {
           <button className="modal-btn secondary" onClick={onClose}>
             Отмена
           </button>
-          <button className="modal-btn primary" onClick={handleSubmit}>
+          <button className="primary-btn" onClick={handleSubmit}>
             Сбросить пароль
           </button>
         </div>

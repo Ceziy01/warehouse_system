@@ -3,7 +3,6 @@ import './PageHeader.css';
 
 function PageHeader({ icon, title, subtitle }) {
   return (
-    <div className="page-header">
       <div className="page-title-group">
         <span className="material-symbols-outlined page-icon">{icon}</span>
         <div className="page-title-text">
@@ -11,7 +10,6 @@ function PageHeader({ icon, title, subtitle }) {
           {subtitle && <p className="page-sub">{subtitle}</p>}
         </div>
       </div>
-    </div>
   );
 }
 
