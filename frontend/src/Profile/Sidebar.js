@@ -85,7 +85,7 @@ function Sidebar() {
                 <span className="material-symbols-outlined">
                   group
                 </span>
-                Пользователи
+                Пользовател
               </NavLink>
 
               <NavLink
@@ -94,7 +94,7 @@ function Sidebar() {
                 onClick={closeSidebar}
               >
                 <span className="material-symbols-outlined">
-                  history
+                  database
                 </span>
                 Бэкапы
               </NavLink>
