@@ -44,10 +44,10 @@ export default function BackupPage() {
         if (!window.confirm(`ВНИМАНИЕ! Восстановление базы данных из "${filename}" заменит все текущие данные. Продолжить?`)) {
             return;
         }
-        
+
         setRestoring(prev => ({ ...prev, [filename]: true }));
         const res = await fetchWithAuth(`/auth/admin/backup/restore/${filename}`, { method: "POST" });
-        
+
         if (res.ok) {
             toast.success("База данных успешно восстановлена");
             loadBackups();
@@ -143,35 +143,36 @@ export default function BackupPage() {
         <div className="container">
             <div className="page-header">
                 <PageHeader icon="database" title="Бэкапы базы данных" />
-                <div style={{ display: "flex", gap: "10px" }}>
-                    <button 
-                        className="primary-btn" 
-                        onClick={handleCreateBackup} 
-                        disabled={creating}
-                    >
-                        <span className="material-symbols-outlined" style={{ marginRight: '8px', fontSize: '18px', verticalAlign: 'middle' }}>
-                            add
-                        </span>
-                        {creating ? "Создание..." : "Создать бэкап"}
-                    </button>
-                    <button 
-                        className="primary-btn" 
-                        onClick={() => fileInputRef.current.click()}
-                        title="Восстановить из файла"
-                    >
-                        <span className="material-symbols-outlined" style={{ marginRight: '8px', fontSize: '18px', verticalAlign: 'middle' }}>
-                            upload_file
-                        </span>
-                        Восстановить из файла
-                    </button>
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept=".sql"
-                        style={{ display: 'none' }}
-                        onChange={handleRestoreFromFile}
-                    />
-                </div>
+            </div>
+
+            <div className="header-actions" style={{ marginBottom: '16px' }}>
+                <button
+                    className="primary-btn"
+                    onClick={handleCreateBackup}
+                    disabled={creating}
+                >
+                    <span className="material-symbols-outlined" style={{ marginRight: '8px', fontSize: '18px', verticalAlign: 'middle' }}>
+                        add
+                    </span>
+                    {creating ? "Создание..." : "Создать бэкап"}
+                </button>
+                <button
+                    className="primary-btn"
+                    onClick={() => fileInputRef.current.click()}
+                    title="Восстановить из файла"
+                >
+                    <span className="material-symbols-outlined" style={{ marginRight: '8px', fontSize: '18px', verticalAlign: 'middle' }}>
+                        upload_file
+                    </span>
+                    Восстановить из файла
+                </button>
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".sql"
+                    style={{ display: 'none' }}
+                    onChange={handleRestoreFromFile}
+                />
             </div>
 
             {loading ? (
@@ -184,53 +185,55 @@ export default function BackupPage() {
                     </p>
                 </div>
             ) : (
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Файл</th>
-                            <th>Размер</th>
-                            <th>Дата создания</th>
-                            <th>Действия</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {backups.map((b) => (
-                            <tr key={b.filename}>
-                                <td>{b.filename}</td>
-                                <td>{formatSize(b.size)}</td>
-                                <td>{new Date(b.created_at).toLocaleString()}</td>
-                                <td>
-                                    <div className="actions-container">
-                                        <ActionButton 
-                                            type="extra" 
-                                            onClick={() => handleDownload(b.filename)} 
-                                            tip="Скачать"
-                                        >
-                                            <span className="material-symbols-outlined">download</span>
-                                        </ActionButton>
-                                        <ActionButton 
-                                            type="neutral" 
-                                            onClick={() => handleRestoreFromServer(b.filename)} 
-                                            tip="Восстановить из бэкапа"
-                                            disabled={restoring[b.filename]}
-                                        >
-                                            <span className="material-symbols-outlined">
-                                                {restoring[b.filename] ? "hourglass_top" : "restore_page"}
-                                            </span>
-                                        </ActionButton>
-                                        <ActionButton 
-                                            type="danger" 
-                                            onClick={() => handleDelete(b.filename)} 
-                                            tip="Удалить бэкап"
-                                        >
-                                            <span className="material-symbols-outlined">delete</span>
-                                        </ActionButton>
-                                    </div>
-                                </td>
+                <div className="table-wrap">
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th>Файл</th>
+                                <th>Размер</th>
+                                <th>Дата создания</th>
+                                <th>Действия</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {backups.map((b) => (
+                                <tr key={b.filename}>
+                                    <td>{b.filename}</td>
+                                    <td>{formatSize(b.size)}</td>
+                                    <td>{new Date(b.created_at).toLocaleString()}</td>
+                                    <td>
+                                        <div className="actions-container">
+                                            <ActionButton
+                                                type="extra"
+                                                onClick={() => handleDownload(b.filename)}
+                                                tip="Скачать"
+                                            >
+                                                <span className="material-symbols-outlined">download</span>
+                                            </ActionButton>
+                                            <ActionButton
+                                                type="neutral"
+                                                onClick={() => handleRestoreFromServer(b.filename)}
+                                                tip="Восстановить из бэкапа"
+                                                disabled={restoring[b.filename]}
+                                            >
+                                                <span className="material-symbols-outlined">
+                                                    {restoring[b.filename] ? "hourglass_top" : "restore_page"}
+                                                </span>
+                                            </ActionButton>
+                                            <ActionButton
+                                                type="danger"
+                                                onClick={() => handleDelete(b.filename)}
+                                                tip="Удалить бэкап"
+                                            >
+                                                <span className="material-symbols-outlined">delete</span>
+                                            </ActionButton>
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
         </div>
     );
