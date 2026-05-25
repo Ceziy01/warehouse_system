@@ -51,7 +51,7 @@ function MyOrdersPage() {
   return (
     <div className="container">
       <div className="page-header">
-        <PageHeader icon="receipt_long" title="Мои заказы"/>
+        <PageHeader icon="receipt_long" title="Мои заказы" />
         <ActionButton type="excel" tip="Экспорт в Excel" onClick={handleExport}>
           <span className="material-symbols-outlined">table_view</span>
         </ActionButton>
@@ -78,26 +78,28 @@ function MyOrdersPage() {
                 </button>
               )}
             </div>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Товар</th>
-                  <th>Кол-во</th>
-                  <th>Цена</th>
-                  <th>Сумма</th>
-                </tr>
-              </thead>
-              <tbody>
-                {order.items.map(item => (
-                  <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{item.quantity}</td>
-                    <td>{item.price_at_time} ₽</td>
-                    <td>{item.price_at_time * item.quantity} ₽</td>
+            <div className="table-wrap">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th>Товар</th>
+                    <th>Кол-во</th>
+                    <th>Цена</th>
+                    <th>Сумма</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {order.items.map(item => (
+                    <tr key={item.id}>
+                      <td>{item.name}</td>
+                      <td>{item.quantity}</td>
+                      <td>{item.price_at_time} ₽</td>
+                      <td>{item.price_at_time * item.quantity} ₽</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         ))
       )}

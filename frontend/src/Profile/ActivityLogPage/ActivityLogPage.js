@@ -263,8 +263,8 @@ export default function ActivityLogPage() {
           <p>Записей не найдено</p>
         </div>
       ) : (
-        <div className="log-table-wrap">
-          <table className="log-table" ref={tableRef}>
+        <div className="table-wrap">
+          <table className="table" ref={tableRef}>
             <thead>
               <tr>
                 <th>Дата и время</th>

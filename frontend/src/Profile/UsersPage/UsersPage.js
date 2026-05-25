@@ -269,112 +269,114 @@ function UsersPage() {
           </div>
         </div>
 
-        <table ref={tableRef} className="table">
-          <thead>
-            <tr>
-              <th style={{ width: '60px' }}>ID</th>
-              <th>Логин</th>
-              <th>Имя</th>
-              <th>Фамилия</th>
-              <th>Почта</th>
-              <th style={{ width: '120px' }}>Пароль</th>
-              <th style={{ width: '160px' }}>Тип аккаунта</th>
-              <th style={{ width: '180px' }}>Действия</th>
-            </tr>
-          </thead>
-          <tbody>
-            {finalFilteredUsers.map((u) =>
-              u.id === editingId ? (
-                <tr key={u.id}>
-                  <td>{u.id}</td>
-                  <td><input name="username" value={editForm.username} onChange={handleEditChange} placeholder="Логин" /></td>
-                  <td><input name="first_name" value={editForm.first_name} onChange={handleEditChange} placeholder="Имя" /></td>
-                  <td><input name="last_name" value={editForm.last_name} onChange={handleEditChange} placeholder="Фамилия" /></td>
-                  <td><input name="email" value={editForm.email} onChange={handleEditChange} placeholder="Почта" /></td>
-                  <td>********</td>
-                  <td>
-                    <select name="role" value={editForm.role} onChange={handleEditChange} className="table-select">
-                      <option value="customer">Клиент</option>
-                      <option value="admin">Администратор</option>
-                      <option value="management">Руководство</option>
-                      <option value="sales_manager">Менеджер по продажам</option>
-                      <option value="purchase_manager">Менеджер по закупкам</option>
-                      <option value="warehouse_keeper">Кладовщик</option>
-                      <option value="accountant">Бухгалтер</option>
-                      <option value="supplier">Поставщик</option>
-                    </select>
-                  </td>
-                  <td>
-                    <div className="edit-actions">
-                      <ActionButton type="apply" onClick={saveEdit} tip="Сохранить"><span className="material-symbols-outlined">check</span></ActionButton>
-                      <ActionButton type="danger" onClick={cancelEdit} tip="Отменить"><span className="material-symbols-outlined">close</span></ActionButton>
-                    </div>
-                  </td>
-                </tr>
-              ) : (
-                <tr key={u.id}>
-                  <td>{u.id}</td>
-                  <td>{u.username}</td>
-                  <td>{u.first_name}</td>
-                  <td>{u.last_name}</td>
-                  <td>{u.email}</td>
-                  <td>********</td>
-                  <td><span className="badge-role">{getRoleLabel(u.role)}</span></td>
-                  <td>
-                    <div className="actions-container">
-                      <ActionButton
-                        type="danger"
-                        onClick={() => deleteUser(u.id)}
-                        tip="Удалить">
-                        <span className="material-symbols-outlined">delete</span>
-                      </ActionButton>
-                      <ActionButton
-                        type="neutral"
-                        onClick={() => startEdit(u)}
-                        tip="Редактировать">
-                        <span className="material-symbols-outlined">edit</span>
-                      </ActionButton>
-                      <ActionButton
-                        type="extra"
-                        onClick={() => openResetPasswordModal(u.id, u.username)}
-                        tip="Сменить пароль">
-                        <span className="material-symbols-outlined">lock_reset</span>
-                      </ActionButton>
-                      <ActionButton
-                        type="extra1"
-                        tip="Войти как пользователь"
-                        onClick={() => impersonate(u.id)}><span
-                          className="material-symbols-outlined">switch_account</span>
-                      </ActionButton>
-                    </div>
-                  </td>
-                </tr>
-              )
-            )}
-            <tr>
-              <td></td>
-              <td><input placeholder="Логин" value={username} onChange={(e) => setUsername(e.target.value)} /></td>
-              <td><input placeholder="Имя" value={firstName} onChange={(e) => setFirstname(e.target.value)} /></td>
-              <td><input placeholder="Фамилия" value={lastName} onChange={(e) => setLastname(e.target.value)} /></td>
-              <td><input placeholder="Почта" value={email} onChange={(e) => setEmail(e.target.value)} /></td>
-              <td><input type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} style={{ width: '100%' }} /></td>
-              <td>
-                <select name="role" value={role} onChange={(e) => setRole(e.target.value)} className="table-select">
-                  <option value="customer">Клиент</option>
-                  <option value="admin">Администратор</option>
-                  <option value="management">Руководство</option>
-                  <option value="sales_manager">Менеджер по продажам</option>
-                  <option value="purchase_manager">Менеджер по закупкам</option>
-                  <option value="warehouse_keeper">Кладовщик</option>
-                  <option value="accountant">Бухгалтер</option>
-                </select>
-              </td>
-              <td>
-                <button type="submit" className="primary-btn" style={{width: '100%'}}>Добавить</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div className="table-wrap">
+          <table ref={tableRef} className="table">
+            <thead>
+              <tr>
+                <th style={{ width: '60px' }}>ID</th>
+                <th>Логин</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Почта</th>
+                <th style={{ width: '120px' }}>Пароль</th>
+                <th style={{ width: '160px' }}>Тип аккаунта</th>
+                <th style={{ width: '180px' }}>Действия</th>
+              </tr>
+            </thead>
+            <tbody>
+              {finalFilteredUsers.map((u) =>
+                u.id === editingId ? (
+                  <tr key={u.id}>
+                    <td>{u.id}</td>
+                    <td><input name="username" value={editForm.username} onChange={handleEditChange} placeholder="Логин" /></td>
+                    <td><input name="first_name" value={editForm.first_name} onChange={handleEditChange} placeholder="Имя" /></td>
+                    <td><input name="last_name" value={editForm.last_name} onChange={handleEditChange} placeholder="Фамилия" /></td>
+                    <td><input name="email" value={editForm.email} onChange={handleEditChange} placeholder="Почта" /></td>
+                    <td>********</td>
+                    <td>
+                      <select name="role" value={editForm.role} onChange={handleEditChange} className="table-select">
+                        <option value="customer">Клиент</option>
+                        <option value="admin">Администратор</option>
+                        <option value="management">Руководство</option>
+                        <option value="sales_manager">Менеджер по продажам</option>
+                        <option value="purchase_manager">Менеджер по закупкам</option>
+                        <option value="warehouse_keeper">Кладовщик</option>
+                        <option value="accountant">Бухгалтер</option>
+                        <option value="supplier">Поставщик</option>
+                      </select>
+                    </td>
+                    <td>
+                      <div className="edit-actions">
+                        <ActionButton type="apply" onClick={saveEdit} tip="Сохранить"><span className="material-symbols-outlined">check</span></ActionButton>
+                        <ActionButton type="danger" onClick={cancelEdit} tip="Отменить"><span className="material-symbols-outlined">close</span></ActionButton>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  <tr key={u.id}>
+                    <td>{u.id}</td>
+                    <td>{u.username}</td>
+                    <td>{u.first_name}</td>
+                    <td>{u.last_name}</td>
+                    <td>{u.email}</td>
+                    <td>********</td>
+                    <td><span className="badge-role">{getRoleLabel(u.role)}</span></td>
+                    <td>
+                      <div className="actions-container">
+                        <ActionButton
+                          type="danger"
+                          onClick={() => deleteUser(u.id)}
+                          tip="Удалить">
+                          <span className="material-symbols-outlined">delete</span>
+                        </ActionButton>
+                        <ActionButton
+                          type="neutral"
+                          onClick={() => startEdit(u)}
+                          tip="Редактировать">
+                          <span className="material-symbols-outlined">edit</span>
+                        </ActionButton>
+                        <ActionButton
+                          type="extra"
+                          onClick={() => openResetPasswordModal(u.id, u.username)}
+                          tip="Сменить пароль">
+                          <span className="material-symbols-outlined">lock_reset</span>
+                        </ActionButton>
+                        <ActionButton
+                          type="extra1"
+                          tip="Войти как пользователь"
+                          onClick={() => impersonate(u.id)}><span
+                            className="material-symbols-outlined">switch_account</span>
+                        </ActionButton>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              )}
+              <tr>
+                <td></td>
+                <td><input placeholder="Логин" value={username} onChange={(e) => setUsername(e.target.value)} /></td>
+                <td><input placeholder="Имя" value={firstName} onChange={(e) => setFirstname(e.target.value)} /></td>
+                <td><input placeholder="Фамилия" value={lastName} onChange={(e) => setLastname(e.target.value)} /></td>
+                <td><input placeholder="Почта" value={email} onChange={(e) => setEmail(e.target.value)} /></td>
+                <td><input type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} style={{ width: '100%' }} /></td>
+                <td>
+                  <select name="role" value={role} onChange={(e) => setRole(e.target.value)} className="table-select">
+                    <option value="customer">Клиент</option>
+                    <option value="admin">Администратор</option>
+                    <option value="management">Руководство</option>
+                    <option value="sales_manager">Менеджер по продажам</option>
+                    <option value="purchase_manager">Менеджер по закупкам</option>
+                    <option value="warehouse_keeper">Кладовщик</option>
+                    <option value="accountant">Бухгалтер</option>
+                  </select>
+                </td>
+                <td>
+                  <button type="submit" className="primary-btn" style={{ width: '100%' }}>Добавить</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </form>
     </div>
   );

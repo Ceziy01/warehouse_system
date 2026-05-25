@@ -25,7 +25,7 @@ function WarehousesPage() {
 
   const handleExport = () => {
     if (tableRef.current) {
-      exportTableToExcel(tableRef.current, `склады_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}`);
+      exportTableToExcel(tableRef.current, `склады_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}`);
     }
   };
 
@@ -114,7 +114,7 @@ function WarehousesPage() {
   return (
     <div className="container warehouses-page">
       <div className="page-header">
-        <PageHeader icon="warehouse" title="Склады"/>
+        <PageHeader icon="warehouse" title="Склады" />
         <ActionButton type="excel" tip="Экспорт в Excel" onClick={handleExport}>
           <span className="material-symbols-outlined">table_view</span>
         </ActionButton>
@@ -137,57 +137,59 @@ function WarehousesPage() {
         </div>
       </div>
 
-      <table ref={tableRef} className="table">
-        <thead>
-          <tr>
-            <th style={{ width: '60px' }}>ID</th>
-            <th>Название</th>
-            <th>Адрес</th>
-            {canEdit && <th style={{ width: '120px' }}>Действия</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {filteredWarehouses.map(wh => (
-            wh.id === editingId ? (
-              <tr key={wh.id}>
-                <td>{wh.id}</td>
-                <td><input name="name" value={editForm.name} onChange={handleEditChange} placeholder="Название" /></td>
-                <td><input name="address" value={editForm.address} onChange={handleEditChange} placeholder="Адрес" /></td>
-                <td>
-                  <div className="edit-actions">
-                    <ActionButton type="apply" onClick={saveEdit} tip="Сохранить"><span className="material-symbols-outlined">check</span></ActionButton>
-                    <ActionButton type="danger" onClick={cancelEdit} tip="Отменить"><span className="material-symbols-outlined">close</span></ActionButton>
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              <tr key={wh.id}>
-                <td>{wh.id}</td>
-                <td>{wh.name}</td>
-                <td>{wh.address}</td>
-                {canEdit && (
+      <div className="table-wrap">
+        <table ref={tableRef} className="table">
+          <thead>
+            <tr>
+              <th style={{ width: '60px' }}>ID</th>
+              <th>Название</th>
+              <th>Адрес</th>
+              {canEdit && <th style={{ width: '120px' }}>Действия</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {filteredWarehouses.map(wh => (
+              wh.id === editingId ? (
+                <tr key={wh.id}>
+                  <td>{wh.id}</td>
+                  <td><input name="name" value={editForm.name} onChange={handleEditChange} placeholder="Название" /></td>
+                  <td><input name="address" value={editForm.address} onChange={handleEditChange} placeholder="Адрес" /></td>
                   <td>
-                    <div className="actions-container">
-                      <ActionButton type="neutral" onClick={() => startEdit(wh)} tip="Редактировать"><span className="material-symbols-outlined">edit</span></ActionButton>
-                      <ActionButton type="danger" onClick={() => deleteWarehouse(wh.id)} tip="Удалить"><span className="material-symbols-outlined">delete</span></ActionButton>
+                    <div className="edit-actions">
+                      <ActionButton type="apply" onClick={saveEdit} tip="Сохранить"><span className="material-symbols-outlined">check</span></ActionButton>
+                      <ActionButton type="danger" onClick={cancelEdit} tip="Отменить"><span className="material-symbols-outlined">close</span></ActionButton>
                     </div>
                   </td>
-                )}
+                </tr>
+              ) : (
+                <tr key={wh.id}>
+                  <td>{wh.id}</td>
+                  <td>{wh.name}</td>
+                  <td>{wh.address}</td>
+                  {canEdit && (
+                    <td>
+                      <div className="actions-container">
+                        <ActionButton type="neutral" onClick={() => startEdit(wh)} tip="Редактировать"><span className="material-symbols-outlined">edit</span></ActionButton>
+                        <ActionButton type="danger" onClick={() => deleteWarehouse(wh.id)} tip="Удалить"><span className="material-symbols-outlined">delete</span></ActionButton>
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              )
+            ))}
+            {canEdit && (
+              <tr>
+                <td></td>
+                <td><input placeholder="Название" value={newName} onChange={e => setNewName(e.target.value)} /></td>
+                <td><input placeholder="Адрес" value={newAddress} onChange={e => setNewAddress(e.target.value)} /></td>
+                <td>
+                  <button type="button" className="primary-btn" onClick={createWarehouse}>Добавить</button>
+                </td>
               </tr>
-            )
-          ))}
-          {canEdit && (
-            <tr>
-              <td></td>
-              <td><input placeholder="Название" value={newName} onChange={e => setNewName(e.target.value)} /></td>
-              <td><input placeholder="Адрес" value={newAddress} onChange={e => setNewAddress(e.target.value)} /></td>
-              <td>
-                <button type="button" className="primary-btn" onClick={createWarehouse}>Добавить</button>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

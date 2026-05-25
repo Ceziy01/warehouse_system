@@ -131,56 +131,58 @@ function ItemsManagePage() {
         <button className="primary-btn search-btn" onClick={searchItems}>Найти</button>
       </div>
 
-      <table ref={tableRef} className="table items-table">
-        <thead>
-          <tr>
-            <th style={{ width: '50px' }}>ID</th>
-            <th style={{ width: '120px' }}>Артикул</th>
-            <th>Название</th>
-            <th style={{ width: '140px' }}>Категория</th>
-            <th style={{ width: '80px' }}>Кол-во</th>
-            <th style={{ width: '60px' }}>Ед.</th>
-            <th style={{ width: '100px' }}>Цена</th>
-            <th style={{ width: '140px' }}>Склад</th>
-            <th style={{ width: '100px' }}>Срок</th>
-            {canEdit && <th style={{ width: '140px' }}>Действия</th>}
-          </tr>
-        </thead>
-
-        <tbody>
-          {items.map(item => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.article}</td>
-              <td>{item.name}</td>
-              <td>{item.category_name || "—"}</td>
-              <td>{item.quantity}</td>
-              <td>{item.unit}</td>
-              <td>{item.price} ₽</td>
-              <td>{item.warehouse_name || "—"}</td>
-              <td>{formatShelfLife(item.shelf_life_days)}</td>
-
-              {canEdit && (
-                <td>
-                  <div className="actions-container">
-                    <ActionButton type="extra" onClick={() => { setSelectedImage(item.image_url); setImageModalOpen(true); }} tip="Предпросмотр"><span className="material-symbols-outlined">visibility</span></ActionButton>
-                    <ActionButton type="danger" onClick={() => handleDelete(item.id)} tip="Удалить"><span className="material-symbols-outlined">delete</span></ActionButton>
-                    <ActionButton type="neutral" onClick={() => openEditModal(item)} tip="Редактировать"><span className="material-symbols-outlined">edit</span></ActionButton>
-                  </div>
-                </td>
-              )}
-            </tr>
-          ))}
-
-          {items.length === 0 && (
+      <div className="table-wrap">
+        <table ref={tableRef} className="table items-table">
+          <thead>
             <tr>
-              <td colSpan={canEdit ? 10 : 9} style={{ textAlign: "center", padding: "30px" }}>
-                Ничего не найдено
-              </td>
+              <th style={{ width: '50px' }}>ID</th>
+              <th style={{ width: '120px' }}>Артикул</th>
+              <th>Название</th>
+              <th style={{ width: '140px' }}>Категория</th>
+              <th style={{ width: '80px' }}>Кол-во</th>
+              <th style={{ width: '60px' }}>Ед.</th>
+              <th style={{ width: '100px' }}>Цена</th>
+              <th style={{ width: '140px' }}>Склад</th>
+              <th style={{ width: '100px' }}>Срок</th>
+              {canEdit && <th style={{ width: '140px' }}>Действия</th>}
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {items.map(item => (
+              <tr key={item.id}>
+                <td>{item.id}</td>
+                <td>{item.article}</td>
+                <td title={item.name}>{item.name}</td>
+                <td>{item.category_name || "—"}</td>
+                <td>{item.quantity}</td>
+                <td>{item.unit}</td>
+                <td>{item.price} ₽</td>
+                <td>{item.warehouse_name || "—"}</td>
+                <td>{formatShelfLife(item.shelf_life_days)}</td>
+
+                {canEdit && (
+                  <td>
+                    <div className="actions-container">
+                      <ActionButton type="extra" onClick={() => { setSelectedImage(item.image_url); setImageModalOpen(true); }} tip="Предпросмотр"><span className="material-symbols-outlined">visibility</span></ActionButton>
+                      <ActionButton type="danger" onClick={() => handleDelete(item.id)} tip="Удалить"><span className="material-symbols-outlined">delete</span></ActionButton>
+                      <ActionButton type="neutral" onClick={() => openEditModal(item)} tip="Редактировать"><span className="material-symbols-outlined">edit</span></ActionButton>
+                    </div>
+                  </td>
+                )}
+              </tr>
+            ))}
+
+            {items.length === 0 && (
+              <tr>
+                <td colSpan={canEdit ? 10 : 9} style={{ textAlign: "center", padding: "30px" }}>
+                  Ничего не найдено
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {modalOpen && (
         <ItemModal

@@ -184,7 +184,7 @@ function PurchasesPage() {
     <div className="container">
       <div className="page-header">
         <PageHeader icon="shopping_bag" title="Закупки" />
-        <div style={{ display: "flex", gap: "10px" }}>
+        <div className="header-actions">
           {canEdit && (
             <button className="primary-btn" onClick={handleCreate}>
               Создать закупку
@@ -269,91 +269,92 @@ function PurchasesPage() {
           </button>
         )}
       </div>
-
-      <table className="table purchases-table" ref={tableRef}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Товар</th>
-            <th>Кол-во</th>
-            <th>Закуп. цена (₽)</th>
-            <th>Поставщик</th>
-            <th>Склад</th>
-            <th>Статус</th>
-            <th>Дата</th>
-            <th>Действия</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredPurchases.map((p) => (
-            <tr key={p.id}>
-              <td>{p.id}</td>
-              <td>{p.product_name}</td>
-              <td>{p.quantity}</td>
-              <td>{p.purchase_price.toFixed(2)}</td>
-              <td>{p.supplier_name || p.supplier_id}</td>
-              <td>{p.warehouse_name || p.warehouse_id}</td>
-              <td style={{ color: statusColors[p.status] }}>
-                {statusLabels[p.status]}
-              </td>
-              <td>{new Date(p.created_at).toLocaleString()}</td>
-              <td>
-                <div className="actions-container">
-                  {canEdit && p.status === "created" && (
-                    <ActionButton
-                      type="neutral"
-                      onClick={() => handleInitiate(p.id)}
-                      tip="Инициировать"
-                      disabled={updating[p.id]}
-                    >
-                      <span className="material-symbols-outlined">
-                        play_arrow
-                      </span>
-                    </ActionButton>
-                  )}
-                  {canEdit && p.status === "created" && (
-                    <ActionButton
-                      type="danger"
-                      onClick={() => handleDelete(p.id)}
-                      tip="Удалить"
-                      disabled={updating[p.id]}
-                    >
-                      <span className="material-symbols-outlined">delete</span>
-                    </ActionButton>
-                  )}
-                  {canComplete && p.status === "initiated" && (
-                    <ActionButton
-                      type="apply"
-                      onClick={() => handleCompleteClick(p)}
-                      tip="Завершить"
-                      disabled={updating[p.id]}
-                    >
-                      <span className="material-symbols-outlined">check</span>
-                    </ActionButton>
-                  )}
-                  {canComplete && p.status === "initiated" && (
-                    <ActionButton
-                      type="danger"
-                      onClick={() => handleCancelClick(p.id)}
-                      tip="Отменить"
-                      disabled={updating[p.id]}
-                    >
-                      <span className="material-symbols-outlined">close</span>
-                    </ActionButton>
-                  )}
-                </div>
-              </td>
-            </tr>
-          ))}
-          {filteredPurchases.length === 0 && (
+      <div className="table-wrap">
+        <table className="table purchases-table" ref={tableRef}>
+          <thead>
             <tr>
-              <td colSpan="9" style={{ textAlign: "center", padding: "30px" }}>
-                Нет закупок, соответствующих фильтрам
-              </td>
+              <th>ID</th>
+              <th>Товар</th>
+              <th>Кол-во</th>
+              <th>Закуп. цена (₽)</th>
+              <th>Поставщик</th>
+              <th>Склад</th>
+              <th>Статус</th>
+              <th>Дата</th>
+              <th>Действия</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredPurchases.map((p) => (
+              <tr key={p.id}>
+                <td>{p.id}</td>
+                <td>{p.product_name}</td>
+                <td>{p.quantity}</td>
+                <td>{p.purchase_price.toFixed(2)}</td>
+                <td>{p.supplier_name || p.supplier_id}</td>
+                <td>{p.warehouse_name || p.warehouse_id}</td>
+                <td style={{ color: statusColors[p.status] }}>
+                  {statusLabels[p.status]}
+                </td>
+                <td>{new Date(p.created_at).toLocaleString()}</td>
+                <td>
+                  <div className="actions-container">
+                    {canEdit && p.status === "created" && (
+                      <ActionButton
+                        type="neutral"
+                        onClick={() => handleInitiate(p.id)}
+                        tip="Инициировать"
+                        disabled={updating[p.id]}
+                      >
+                        <span className="material-symbols-outlined">
+                          play_arrow
+                        </span>
+                      </ActionButton>
+                    )}
+                    {canEdit && p.status === "created" && (
+                      <ActionButton
+                        type="danger"
+                        onClick={() => handleDelete(p.id)}
+                        tip="Удалить"
+                        disabled={updating[p.id]}
+                      >
+                        <span className="material-symbols-outlined">delete</span>
+                      </ActionButton>
+                    )}
+                    {canComplete && p.status === "initiated" && (
+                      <ActionButton
+                        type="apply"
+                        onClick={() => handleCompleteClick(p)}
+                        tip="Завершить"
+                        disabled={updating[p.id]}
+                      >
+                        <span className="material-symbols-outlined">check</span>
+                      </ActionButton>
+                    )}
+                    {canComplete && p.status === "initiated" && (
+                      <ActionButton
+                        type="danger"
+                        onClick={() => handleCancelClick(p.id)}
+                        tip="Отменить"
+                        disabled={updating[p.id]}
+                      >
+                        <span className="material-symbols-outlined">close</span>
+                      </ActionButton>
+                    )}
+                  </div>
+                </td>
+              </tr>
+            ))}
+            {filteredPurchases.length === 0 && (
+              <tr>
+                <td colSpan="9" style={{ textAlign: "center", padding: "30px" }}>
+                  Нет закупок, соответствующих фильтрам
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {createModalOpen && (
         <PurchaseCreateModal

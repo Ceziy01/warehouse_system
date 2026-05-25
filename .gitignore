@@ -59,6 +59,7 @@ code.txt
 крч.txt
 load.py
 test.py
+tests/
 
 # ======== Медиафайлы бэкенда (если не хотите хранить в гите) ========
 # backend/images/*

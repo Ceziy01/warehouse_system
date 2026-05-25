@@ -40,14 +40,14 @@ function ClientsPage() {
 
   const handleExport = () => {
     if (tableRef.current) {
-      exportTableToExcel(tableRef.current, `клиенты_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}`);
+      exportTableToExcel(tableRef.current, `клиенты_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}`);
     }
   };
 
   return (
     <div className="container">
       <div className="page-header">
-        <PageHeader icon="people" title="Клиенты"/>
+        <PageHeader icon="people" title="Клиенты" />
         <ActionButton type="excel" tip="Экспорт в Excel" onClick={handleExport}>
           <span className="material-symbols-outlined">table_view</span>
         </ActionButton>
@@ -70,35 +70,37 @@ function ClientsPage() {
         </div>
       </div>
 
-      <table ref={tableRef} className="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Логин</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredClients.map((client, index) => (
-            <tr key={index}>
-              <td>{client.id}</td>
-              <td>{client.username}</td>
-              <td>{client.first_name || "—"}</td>
-              <td>{client.last_name || "—"}</td>
-              <td>{client.email || "—"}</td>
-            </tr>
-          ))}
-          {filteredClients.length === 0 && (
+      <div className="table-wrap">
+        <table ref={tableRef} className="table">
+          <thead>
             <tr>
-              <td colSpan="5" style={{ textAlign: "center", padding: "30px" }}>
-                Ничего не найдено
-              </td>
+              <th>ID</th>
+              <th>Логин</th>
+              <th>Имя</th>
+              <th>Фамилия</th>
+              <th>Email</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredClients.map((client, index) => (
+              <tr key={index}>
+                <td>{client.id}</td>
+                <td>{client.username}</td>
+                <td>{client.first_name || "—"}</td>
+                <td>{client.last_name || "—"}</td>
+                <td>{client.email || "—"}</td>
+              </tr>
+            ))}
+            {filteredClients.length === 0 && (
+              <tr>
+                <td colSpan="5" style={{ textAlign: "center", padding: "30px" }}>
+                  Ничего не найдено
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

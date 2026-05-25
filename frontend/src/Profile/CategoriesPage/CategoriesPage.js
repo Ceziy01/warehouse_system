@@ -22,10 +22,10 @@ function CategoriesPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const tableRef = useRef(null);
-  
+
   const handleExport = () => {
     if (tableRef.current) {
-      exportTableToExcel(tableRef.current, `категории_${new Date().toISOString().slice(0,19).replace(/:/g, '-')}`);
+      exportTableToExcel(tableRef.current, `категории_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}`);
     }
   };
 
@@ -140,57 +140,59 @@ function CategoriesPage() {
         </div>
       </div>
 
-      <table ref={tableRef} className="table">
-        <thead>
-          <tr>
-            <th style={{ width: '60px' }}>ID</th>
-            <th>Название</th>
-            <th>Описание</th>
-            {canEdit && <th style={{ width: '120px' }}>Действия</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {filteredCategories.map(cat => (
-            cat.id === editingId ? (
-              <tr key={cat.id}>
-                <td>{cat.id}</td>
-                <td><input name="name" value={editForm.name} onChange={handleEditChange} placeholder="Название" /></td>
-                <td><input name="description" value={editForm.description} onChange={handleEditChange} placeholder="Описание" /></td>
-                <td>
-                  <div className="edit-actions">
-                    <ActionButton type="apply" onClick={saveEdit} tip="Сохранить"><span className="material-symbols-outlined">check</span></ActionButton>
-                    <ActionButton type="danger" onClick={cancelEdit} tip="Отменить"><span className="material-symbols-outlined">close</span></ActionButton>
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              <tr key={cat.id}>
-                <td>{cat.id}</td>
-                <td>{cat.name}</td>
-                <td>{cat.description || "—"}</td>
-                {canEdit && (
+      <div className="table-wrap">
+        <table ref={tableRef} className="table">
+          <thead>
+            <tr>
+              <th style={{ width: '60px' }}>ID</th>
+              <th>Название</th>
+              <th>Описание</th>
+              {canEdit && <th style={{ width: '120px' }}>Действия</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {filteredCategories.map(cat => (
+              cat.id === editingId ? (
+                <tr key={cat.id}>
+                  <td>{cat.id}</td>
+                  <td><input name="name" value={editForm.name} onChange={handleEditChange} placeholder="Название" /></td>
+                  <td><input name="description" value={editForm.description} onChange={handleEditChange} placeholder="Описание" /></td>
                   <td>
-                    <div className="actions-container">
-                      <ActionButton type="neutral" onClick={() => startEdit(cat)} tip="Редактировать"><span className="material-symbols-outlined">edit</span></ActionButton>
-                      <ActionButton type="danger" onClick={() => deleteCategory(cat.id)} tip="Удалить"><span className="material-symbols-outlined">delete</span></ActionButton>
+                    <div className="edit-actions">
+                      <ActionButton type="apply" onClick={saveEdit} tip="Сохранить"><span className="material-symbols-outlined">check</span></ActionButton>
+                      <ActionButton type="danger" onClick={cancelEdit} tip="Отменить"><span className="material-symbols-outlined">close</span></ActionButton>
                     </div>
                   </td>
-                )}
+                </tr>
+              ) : (
+                <tr key={cat.id}>
+                  <td>{cat.id}</td>
+                  <td>{cat.name}</td>
+                  <td>{cat.description || "—"}</td>
+                  {canEdit && (
+                    <td>
+                      <div className="actions-container">
+                        <ActionButton type="neutral" onClick={() => startEdit(cat)} tip="Редактировать"><span className="material-symbols-outlined">edit</span></ActionButton>
+                        <ActionButton type="danger" onClick={() => deleteCategory(cat.id)} tip="Удалить"><span className="material-symbols-outlined">delete</span></ActionButton>
+                      </div>
+                    </td>
+                  )}
+                </tr>
+              )
+            ))}
+            {canEdit && (
+              <tr>
+                <td></td>
+                <td><input placeholder="Название" value={newName} onChange={e => setNewName(e.target.value)} /></td>
+                <td><input placeholder="Описание" value={newDescription} onChange={e => setNewDescription(e.target.value)} /></td>
+                <td>
+                  <button type="button" className="primary-btn" onClick={createCategory}>Добавить</button>
+                </td>
               </tr>
-            )
-          ))}
-          {canEdit && (
-            <tr>
-              <td></td>
-              <td><input placeholder="Название" value={newName} onChange={e => setNewName(e.target.value)} /></td>
-              <td><input placeholder="Описание" value={newDescription} onChange={e => setNewDescription(e.target.value)} /></td>
-              <td>
-                <button type="button" className="primary-btn" onClick={createCategory}>Добавить</button>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
