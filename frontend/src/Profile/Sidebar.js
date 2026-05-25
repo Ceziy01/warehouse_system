@@ -36,8 +36,7 @@ function Sidebar() {
   };
 
   const navClass = ({ isActive }) =>
-    `profile-nav-item shared-sidebar-item ${
-      isActive ? "active" : ""
+    `profile-nav-item shared-sidebar-item ${isActive ? "active" : ""
     }`;
 
   return (
@@ -53,16 +52,14 @@ function Sidebar() {
       </button>
 
       <div
-        className={`sidebar-overlay shared-sidebar-overlay ${
-          isOpen ? "active" : ""
-        }`}
+        className={`sidebar-overlay shared-sidebar-overlay ${isOpen ? "active" : ""
+          }`}
         onClick={closeSidebar}
       />
 
       <aside
-        className={`profile-sidebar shared-sidebar ${
-          isOpen ? "open" : ""
-        }`}
+        className={`profile-sidebar shared-sidebar ${isOpen ? "open" : ""
+          }`}
       >
         <h2 className="shared-sidebar-title">Профиль</h2>
 
@@ -89,6 +86,17 @@ function Sidebar() {
                   group
                 </span>
                 Пользователи
+              </NavLink>
+
+              <NavLink
+                to="/backup"
+                className={navClass}
+                onClick={closeSidebar}
+              >
+                <span className="material-symbols-outlined">
+                  history
+                </span>
+                Бэкапы
               </NavLink>
 
               <NavLink
