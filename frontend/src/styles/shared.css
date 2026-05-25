@@ -212,33 +212,13 @@
   margin-top: 8px;
 }
 
-.modal-btn {
-  height: 40px;
-  padding: 0 20px;
-  border: none;
-  border-radius: 40px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.modal-btn.primary {
-  background: var(--primary);
-  color: var(--on-primary);
-}
-
-.modal-btn.primary:hover {
-  background: var(--primary-hover);
-}
-
-.modal-btn.secondary {
+.secondary-btn {
   background: transparent;
   border: 1px solid var(--border-light);
   color: var(--text-secondary);
 }
 
-.modal-btn.secondary:hover {
+.secondary-btn:hover {
   background: var(--surface-variant);
 }
 
