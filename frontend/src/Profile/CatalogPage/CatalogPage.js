@@ -190,24 +190,27 @@ function CatalogPage() {
                                 <p>Артикул: {item.article}</p>
                                 <p className="price">{item.price} ₽</p>
                                 <p>Категория: {item.category_name}</p>
+                                <p className={`stock-badge ${item.quantity > 0 ? 'in-stock' : 'out-of-stock'}`}>
+                                    {item.quantity > 0 ? `В наличии: ${item.quantity} ${item.unit}` : 'Нет в наличии'}
+                                </p>
                                 {isInCart ? (
                                     <div className="cart-controls">
-                                        <button 
+                                        <button
                                             onClick={() => updateQuantity(item.id, quantity - 1)}
                                             disabled={adding[item.id]}
                                         >-</button>
                                         <span className="cart-quantity">{quantity}</span>
-                                        <button 
+                                        <button
                                             onClick={() => updateQuantity(item.id, quantity + 1)}
                                             disabled={adding[item.id]}
                                         >+</button>
                                     </div>
                                 ) : (
-                                    <button 
+                                    <button
                                         onClick={() => addToCart(item.id)}
-                                        disabled={adding[item.id]}
+                                        disabled={adding[item.id] || item.quantity === 0}
                                     >
-                                        {adding[item.id] ? "Добавление..." : "В корзину"}
+                                        {adding[item.id] ? "Добавление..." : item.quantity === 0 ? "Нет в наличии" : "В корзину"}
                                     </button>
                                 )}
                             </div>

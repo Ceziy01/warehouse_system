@@ -235,3 +235,17 @@
     text-align: center;
     color: var(--text-primary);
 }
+
+.stock-badge {
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 16px 8px;
+}
+
+.stock-badge.in-stock {
+  color: #16a34a;
+}
+
+.stock-badge.out-of-stock {
+  color: #dc2626;
+}
