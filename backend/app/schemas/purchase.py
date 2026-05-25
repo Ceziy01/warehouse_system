@@ -1,11 +1,14 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, Field
+from typing import Optional, Annotated
 from datetime import datetime
+
+NonNegativeInt = Annotated[int, Field(ge=0,description="Не может быть отрицательным")]
+NonNegativeFloat = Annotated[float, Field(ge=0,description="Не может быть отрицательным")]
 
 class PurchaseOrderBase(BaseModel):
     product_name: str
-    quantity: int
-    purchase_price: float
+    quantity: NonNegativeInt
+    purchase_price: NonNegativeFloat
     supplier_id: int
     warehouse_id: int
 
@@ -14,8 +17,8 @@ class PurchaseOrderCreate(PurchaseOrderBase):
 
 class PurchaseOrderUpdate(BaseModel):
     product_name: Optional[str] = None
-    quantity: Optional[int] = None
-    purchase_price: Optional[float] = None
+    quantity: Optional[NonNegativeInt] = None
+    purchase_price: Optional[NonNegativeFloat] = None
     supplier_id: Optional[int] = None
     warehouse_id: Optional[int] = None
     status: Optional[str] = None
@@ -36,6 +39,6 @@ class CompletePurchaseRequest(BaseModel):
     description: Optional[str] = None
     unit: str
     shelf_life_days: Optional[int] = None
-    selling_price: float
+    selling_price: NonNegativeFloat
     category_id: Optional[int] = None
     image_url: Optional[str] = None

@@ -1,12 +1,14 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, Field
+from typing import Optional, Annotated
+
+NonNegativeInt = Annotated[int, Field(ge=0,description="Не может быть отрицательным")]
 
 class CartItemCreate(BaseModel):
     item_id: int
-    quantity: int = 1
+    quantity: NonNegativeInt = 1
 
 class CartItemUpdate(BaseModel):
-    quantity: int
+    quantity: NonNegativeInt
 
 class CartItemResponse(BaseModel):
     id: int
