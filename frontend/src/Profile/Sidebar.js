@@ -85,7 +85,7 @@ function Sidebar() {
                 <span className="material-symbols-outlined">
                   group
                 </span>
-                Пользовател
+                Пользователь
               </NavLink>
 
               <NavLink
