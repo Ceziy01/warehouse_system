@@ -144,7 +144,7 @@ def delete_item(
 
 @router.post("/upload-image")
 def upload_image(
-    user: Annotated[Users, Depends(require_any_authenticated)],
+    user: Annotated[Users, Depends(require_admin_or_warehouse_keeper)],
     file: UploadFile = File(...)
 ):
     ext = file.filename.split(".")[-1]
